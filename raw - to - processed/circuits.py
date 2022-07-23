@@ -1,3 +1,4 @@
+@@ -0,0 +1,85 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC ### Working with circuits.csv file
@@ -11,6 +12,8 @@
 
 # DBTITLE 1,Importing Library
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
+from pyspark.sql.functions import col
+from pyspark.sql.functions import current_timestamp
 
 # COMMAND ----------
 
@@ -37,3 +40,47 @@ df_circuits = spark.read \
 # COMMAND ----------
 
 df_circuits.printSchema()
+
+# COMMAND ----------
+
+# DBTITLE 1,Selected the columns that I'm going to update the name
+df_circuits_selected = df_circuits.select(col("circuitId"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt"))
+
+# COMMAND ----------
+
+df_circuits_selected.show()
+
+# COMMAND ----------
+
+# DBTITLE 1,Renaming the columns
+df_circuits_selected = df_circuits_selected.withColumnRenamed("circuitId", "circuit_id") \
+.withColumnRenamed("circuitRef", "circuit_ref") \
+.withColumnRenamed("lat", "latitude") \
+.withColumnRenamed("lng", "longitude") \
+.withColumnRenamed("alt", "altitude") 
+
+# COMMAND ----------
+
+df_circuits_selected.show()
+
+# COMMAND ----------
+
+# DBTITLE 1,Selected the columns that I'm going to update the name
+df_circuits_selected = df_circuits.select(col("circuitId"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt"))
+
+# COMMAND ----------
+
+df_circuits_selected.show()
+
+# COMMAND ----------
+
+# DBTITLE 1,Renaming the columns
+df_circuits_selected = df_circuits_selected.withColumnRenamed("circuitId", "circuit_id") \
+.withColumnRenamed("circuitRef", "circuit_ref") \
+.withColumnRenamed("lat", "latitude") \
+.withColumnRenamed("lng", "longitude") \
+.withColumnRenamed("alt", "altitude") 
+
+# COMMAND ----------
+
+df_circuits_selected.show()
