@@ -61,3 +61,25 @@ df_circuits_selected = df_circuits_selected.withColumnRenamed("circuitId", "circ
 # COMMAND ----------
 
 df_circuits_selected.show()
+
+# COMMAND ----------
+
+# DBTITLE 1,Selected the columns that I'm going to update the name
+df_circuits_selected = df_circuits.select(col("circuitId"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt"))
+
+# COMMAND ----------
+
+df_circuits_selected.show()
+
+# COMMAND ----------
+
+# DBTITLE 1,Renaming the columns
+df_circuits_selected = df_circuits_selected.withColumnRenamed("circuitId", "circuit_id") \
+.withColumnRenamed("circuitRef", "circuit_ref") \
+.withColumnRenamed("lat", "latitude") \
+.withColumnRenamed("lng", "longitude") \
+.withColumnRenamed("alt", "altitude") 
+
+# COMMAND ----------
+
+df_circuits_selected.show()
