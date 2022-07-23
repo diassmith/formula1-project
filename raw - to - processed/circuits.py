@@ -52,7 +52,7 @@ df_circuits_selected.show()
 # COMMAND ----------
 
 # DBTITLE 1,Renaming the columns
-df_circuits_selected = df_circuits_selected.withColumnRenamed("circuitId", "circuit_id") \
+df_circuits_selected = df_circuits_selected.withColumnRenamed("circuitId", "circuit_id")\
 .withColumnRenamed("circuitRef", "circuit_ref") \
 .withColumnRenamed("lat", "latitude") \
 .withColumnRenamed("lng", "longitude") \
