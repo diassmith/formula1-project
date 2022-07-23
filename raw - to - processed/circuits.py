@@ -1,4 +1,3 @@
-@@ -0,0 +1,85 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC ### Working with circuits.csv file
