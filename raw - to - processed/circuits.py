@@ -61,3 +61,12 @@ df_circuits_selected = df_circuits_selected.withColumnRenamed("circuitId", "circ
 # COMMAND ----------
 
 df_circuits_selected.show()
+
+# COMMAND ----------
+
+# DBTITLE 1,Creating new column to store the data load
+df_circuits_selected = df_circuits_selected.withColumn("data_load", current_timestamp()) 
+
+# COMMAND ----------
+
+display(df_circuits_selected)
