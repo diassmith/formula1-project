@@ -74,7 +74,7 @@ display(df_circuits_selected)
 # COMMAND ----------
 
 # DBTITLE 1,Writing the file in processed layer and in parquet format
-circuits_final_df.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/circuits")
+df_circuits_selected.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/circuits")
 
 # COMMAND ----------
 
