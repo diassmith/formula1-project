@@ -62,7 +62,6 @@ df_circuits_selected = df_circuits_selected.withColumnRenamed("circuitId", "circ
 
 df_circuits_selected.show()
 
-
 # COMMAND ----------
 
 # DBTITLE 1,Creating new column to store the data load
@@ -72,3 +71,11 @@ df_circuits_selected = df_circuits_selected.withColumn("data_load", current_time
 
 display(df_circuits_selected)
 
+# COMMAND ----------
+
+# DBTITLE 1,Writing the file in processed layer and in parquet format
+circuits_final_df.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/circuits")
+
+# COMMAND ----------
+
+display(spark.read.parquet("/mnt/adlsformula1/processed/circuits"))
