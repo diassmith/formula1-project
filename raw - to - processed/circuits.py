@@ -72,3 +72,8 @@ df_circuits_selected = df_circuits_selected.withColumn("date_load", current_time
 display(df_circuits_selected)
 
 # COMMAND ----------
+
+# DBTITLE 1,Writing the file in processed layer and in parquet format
+df_circuits_selected.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/circuits")
+
+# COMMAND ----------
