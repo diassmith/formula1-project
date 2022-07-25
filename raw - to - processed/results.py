@@ -54,7 +54,7 @@ df_results = df_results.withColumnRenamed("resultId", "result_id") \
                                     .withColumnRenamed("fastestLap", "fastest_lap") \
                                     .withColumnRenamed("fastestLapTime", "fastest_lap_time") \
                                     .withColumnRenamed("fastestLapSpeed", "fastest_lap_speed") \
-                                    .withColumn("data_load", current_timestamp()) 
+                                    .withColumn("date_load", current_timestamp()) 
 
 # COMMAND ----------
 

@@ -38,7 +38,7 @@ display(df_constructors)
 # DBTITLE 1,Renaming column and creating data_load column
 df_constructors = df_constructors .withColumnRenamed("constructorId", "constructor_id")\
 .withColumnRenamed("constructorRef", "constructor_ref")\
-.withColumn("data_load", current_timestamp())
+.withColumn("date_load", current_timestamp())
 
 # COMMAND ----------
 
