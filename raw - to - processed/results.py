@@ -44,7 +44,7 @@ display(df_results)
 
 # COMMAND ----------
 
-# DBTITLE 1,Renaming the column
+# DBTITLE 1,Renaming the column and creating data_load column
 df_results = df_results.withColumnRenamed("resultId", "result_id") \
                                     .withColumnRenamed("raceId", "race_id") \
                                     .withColumnRenamed("driverId", "driver_id") \
@@ -54,7 +54,7 @@ df_results = df_results.withColumnRenamed("resultId", "result_id") \
                                     .withColumnRenamed("fastestLap", "fastest_lap") \
                                     .withColumnRenamed("fastestLapTime", "fastest_lap_time") \
                                     .withColumnRenamed("fastestLapSpeed", "fastest_lap_speed") \
-                                    .withColumn("ingestion_date", current_timestamp()) 
+                                    .withColumn("data_load", current_timestamp()) 
 
 # COMMAND ----------
 
