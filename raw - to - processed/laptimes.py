@@ -1,49 +1,43 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ### Working on pit_stops.json file
+# MAGIC ### Working on lap_times files
 
 # COMMAND ----------
 
-# DBTITLE 1,Importing libraies and functions
+# DBTITLE 1,Importing functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 from pyspark.sql.functions import current_timestamp
 
 # COMMAND ----------
 
-# DBTITLE 1,Creating Schema
-pit_stops_schema = StructType(fields=[StructField("raceId", IntegerType(), False),
+# DBTITLE 1,Creating schema
+lap_times_schema = StructType(fields=[StructField("raceId", IntegerType(), False),
                                       StructField("driverId", IntegerType(), True),
-                                      StructField("stop", StringType(), True),
                                       StructField("lap", IntegerType(), True),
+                                      StructField("position", IntegerType(), True),
                                       StructField("time", StringType(), True),
-                                      StructField("duration", StringType(), True),
                                       StructField("milliseconds", IntegerType(), True)
                                      ])
 
 # COMMAND ----------
 
-# DBTITLE 1,Reading file
-df_pit_stops = spark.read \
-.schema(pit_stops_schema) \
-.option("multiLine", True) \
-.json("/mnt/adlsformula1/raw/pit_stops.json")
+# DBTITLE 1,Reading folder
+df_lap_times = spark.read \
+.schema(lap_times_schema) \
+.csv("/mnt/adlsformula1/raw/lap_times")
 
 # COMMAND ----------
 
-display(df_pit_stops)
-
-# COMMAND ----------
-
-# DBTITLE 1,Renaming columns
-df_pit_stops = df_pit_stops.withColumnRenamed("driverId", "driver_id") \
+# DBTITLE 1,Renaming column and creating new column
+df_lap_times = df_lap_times.withColumnRenamed("driverId", "driver_id") \
 .withColumnRenamed("raceId", "race_id") \
 .withColumn("date_load", current_timestamp())
 
 # COMMAND ----------
 
-display(df_pit_stops)
+display(df_lap_times)
 
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file
-df_pit_stops.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/pit_stops")
+df_lap_times.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/lap_times")

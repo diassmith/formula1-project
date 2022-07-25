@@ -44,7 +44,7 @@ display(df_drivers)
 # DBTITLE 1,Renaming  the columns
 df_drivers = df_drivers.withColumnRenamed("driverId", "driver_id") \
                                     .withColumnRenamed("driverRef", "driver_ref") \
-                                    .withColumn("data_load", current_timestamp()) \
+                                    .withColumn("date_load", current_timestamp()) \
                                     .withColumn("name", concat(col("name.forename"), lit(" "), col("name.surname")))
 
 # COMMAND ----------
