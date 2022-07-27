@@ -81,6 +81,3 @@ df_circuits_selected = add_ingestion_date(df_circuits_selected)
 display(df_circuits_selected)
 
 # COMMAND ----------
-
-# DBTITLE 1,Write output parquet file
-df_circuits_selected.write.mode("overwrite").parquet(f"{processed_folder_path}/circuits")
