@@ -43,6 +43,7 @@ df_lap_times = df_lap_times.withColumnRenamed("driverId", "driver_id") \
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating new column
 df_lap_times = add_date_load(df_lap_times)
 
 # COMMAND ----------

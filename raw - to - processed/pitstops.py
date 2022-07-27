@@ -49,6 +49,7 @@ df_pit_stops = df_pit_stops.withColumnRenamed("driverId", "driver_id") \
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating new column
 df_pit_stops = add_date_load(df_pit_stops)
 
 # COMMAND ----------

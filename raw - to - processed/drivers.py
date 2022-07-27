@@ -58,6 +58,7 @@ df_drivers = df_drivers.withColumnRenamed("driverId", "driver_id") \
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating new column
 df_drivers = add_ingestion_date(df_drivers)
 
 # COMMAND ----------

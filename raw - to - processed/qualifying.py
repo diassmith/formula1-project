@@ -4,9 +4,18 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Run the configuration notebook
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# DBTITLE 1,Run the functions notebook 
+# MAGIC %run "../includes/functions"
+
+# COMMAND ----------
+
 # DBTITLE 1,Importing libraries and functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
-from pyspark.sql.functions import current_timestamp
 
 # COMMAND ----------
 
@@ -28,18 +37,22 @@ qualifying_schema = StructType(fields=[StructField("qualifyId", IntegerType(), F
 df_qualifying = spark.read\
 .schema(qualifying_schema)\
 .option("multiLine", True)\
-.json("/mnt/adlsformula1/raw/qualifying")
+.json(f"{raw_folder_path}/qualifying")
 
 # COMMAND ----------
 
-# DBTITLE 1,Renaming and creating column
+# DBTITLE 1,Renaming column
 df_qualifying = df_qualifying.withColumnRenamed("qualifyId", "qualify_id") \
 .withColumnRenamed("driverId", "driver_id") \
 .withColumnRenamed("raceId", "race_id") \
-.withColumnRenamed("constructorId", "constructor_id") \
-.withColumn("date_load", current_timestamp())
+.withColumnRenamed("constructorId", "constructor_id")
+
+# COMMAND ----------
+
+# DBTITLE 1,Creating column
+df_qualifying = add_date_load(df_qualifying)
 
 # COMMAND ----------
 
 # DBTITLE 1,write output parquet file
-df_qualifying.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/qualifying")
+df_qualifying.write.mode("overwrite").parquet(f"{processed_folder_path}/qualifying")
