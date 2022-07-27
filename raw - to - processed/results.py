@@ -53,7 +53,7 @@ display(df_results)
 
 # COMMAND ----------
 
-# DBTITLE 1,Renaming the column and creating data_load column
+# DBTITLE 1,Renaming the column
 df_results = df_results.withColumnRenamed("resultId", "result_id") \
                                     .withColumnRenamed("raceId", "race_id") \
                                     .withColumnRenamed("driverId", "driver_id") \
