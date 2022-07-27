@@ -4,6 +4,12 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating parameters
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../includes/configuration"
 
@@ -44,9 +50,10 @@ display(df_constructors)
 
 # COMMAND ----------
 
-# DBTITLE 1,Renaming column and creating data_load column
+# DBTITLE 1,Renaming column and creating column
 df_constructors = df_constructors .withColumnRenamed("constructorId", "constructor_id")\
-.withColumnRenamed("constructorRef", "constructor_ref")
+.withColumnRenamed("constructorRef", "constructor_ref")\
+.withColumn("data_source", lit(v_data_source))
 
 # COMMAND ----------
 
@@ -61,3 +68,7 @@ display(df_constructors)
 
 # DBTITLE 1,Write output to parquet file
 df_constructors.write.mode("overwrite").parquet(f"{processed_folder_path}/constructors")
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Sucess")
