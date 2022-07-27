@@ -36,7 +36,7 @@ def mount_adls(container_name):
 # DBTITLE 1,call the function to create mount
 #mount_adls("raw")
 #mount_adls("processed")
-mount_adls("trusted")
+#mount_adls("trusted")
 
 # COMMAND ----------
 
