@@ -43,7 +43,7 @@ drivers_schema = StructType(fields=[StructField("driverId", IntegerType(), False
 
 df_drivers = spark.read\
 .schema(drivers_schema)\
-.json(f"{raw_folder_path}/raw/drivers.json")
+.json(f"{raw_folder_path}/drivers.json")
 
 # COMMAND ----------
 
@@ -59,7 +59,7 @@ df_drivers = df_drivers.withColumnRenamed("driverId", "driver_id") \
 # COMMAND ----------
 
 # DBTITLE 1,Creating new column
-df_drivers = add_ingestion_date(df_drivers)
+df_drivers = add_date_load(df_drivers)
 
 # COMMAND ----------
 

@@ -10,7 +10,7 @@
 # COMMAND ----------
 
 # DBTITLE 1,Run the functions notebook 
-# MAGIC %run "../includes/configuration"
+# MAGIC %run "../includes/functions"
 
 # COMMAND ----------
 

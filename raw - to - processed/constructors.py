@@ -60,4 +60,4 @@ display(df_constructors)
 # COMMAND ----------
 
 # DBTITLE 1,Write output to parquet file
-df_constructors.write.mode("overwrite").parquet("f"{processed_folder_path}/constructors")
+df_constructors.write.mode("overwrite").parquet(f"{processed_folder_path}/constructors")

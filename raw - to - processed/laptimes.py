@@ -5,7 +5,7 @@
 # COMMAND ----------
 
 # DBTITLE 1,Run the configuration notebook
-Run the configuration notebook
+# MAGIC %run "../includes/configuration"
 
 # COMMAND ----------
 
@@ -33,7 +33,7 @@ lap_times_schema = StructType(fields=[StructField("raceId", IntegerType(), False
 # DBTITLE 1,Reading folder
 df_lap_times = spark.read \
 .schema(lap_times_schema) \
-.csv("f"{raw_folder_path}/lap_times")
+.csv(f"{raw_folder_path}/lap_times")
 
 # COMMAND ----------
 
