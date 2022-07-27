@@ -4,9 +4,18 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Run the configuration notebook
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# DBTITLE 1,Run the functions notebook 
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
 # DBTITLE 1,Importing libraries and functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, FloatType
-from pyspark.sql.functions import current_timestamp
 from pyspark.sql.functions import col
 
 # COMMAND ----------
@@ -36,7 +45,7 @@ results_schema = StructType(fields=[StructField("resultId", IntegerType(), False
 # DBTITLE 1,Reading file
 df_results = spark.read\
 .schema(results_schema)\
-.json("/mnt/adlsformula1/raw/results.json")
+.json(f"{raw_folder_path}/results.json")
 
 # COMMAND ----------
 
@@ -53,8 +62,12 @@ df_results = df_results.withColumnRenamed("resultId", "result_id") \
                                     .withColumnRenamed("positionOrder", "position_order") \
                                     .withColumnRenamed("fastestLap", "fastest_lap") \
                                     .withColumnRenamed("fastestLapTime", "fastest_lap_time") \
-                                    .withColumnRenamed("fastestLapSpeed", "fastest_lap_speed") \
-                                    .withColumn("date_load", current_timestamp()) 
+                                    .withColumnRenamed("fastestLapSpeed", "fastest_lap_speed")
+
+# COMMAND ----------
+
+# DBTITLE 1,Creating new column
+df_results = add_date_load(df_results)
 
 # COMMAND ----------
 
@@ -68,4 +81,4 @@ display(df_results)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file with partition by race_id
-df_results.write.mode("overwrite").partitionBy('race_id').parquet("/mnt/adlsformula1/processed/results")
+df_results.write.mode("overwrite").partitionBy('race_id').parquet(f"{processed_folder_path}/results")
