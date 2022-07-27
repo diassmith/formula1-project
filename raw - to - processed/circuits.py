@@ -4,6 +4,7 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating Parameters
 dbutils.widgets.text("p_data_source", "")
 v_data_source = dbutils.widgets.get("p_data_source")
 
@@ -90,3 +91,7 @@ display(df_circuits_selected)
 
 # DBTITLE 1,Write output parquet file
 df_circuits_selected.write.mode("overwrite").parquet(f"{processed_folder_path}/circuits")
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Sucess")
