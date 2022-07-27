@@ -4,9 +4,19 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Run the configuration notebook
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# DBTITLE 1,Run the functions notebook 
+# MAGIC %run "../includes/functions"
+
+# COMMAND ----------
+
 # DBTITLE 1,Importing Libraries and Functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DateType
-from pyspark.sql.functions import col, concat, current_timestamp, lit
+from pyspark.sql.functions import col, concat, lit
 
 # COMMAND ----------
 
@@ -33,7 +43,7 @@ drivers_schema = StructType(fields=[StructField("driverId", IntegerType(), False
 
 df_drivers = spark.read\
 .schema(drivers_schema)\
-.json("/mnt/adlsformula1/raw/drivers.json")
+.json(f"{raw_folder_path}/raw/drivers.json")
 
 # COMMAND ----------
 
@@ -44,8 +54,11 @@ display(df_drivers)
 # DBTITLE 1,Renaming  the columns
 df_drivers = df_drivers.withColumnRenamed("driverId", "driver_id") \
                                     .withColumnRenamed("driverRef", "driver_ref") \
-                                    .withColumn("date_load", current_timestamp()) \
                                     .withColumn("name", concat(col("name.forename"), lit(" "), col("name.surname")))
+
+# COMMAND ----------
+
+df_drivers = add_ingestion_date(df_drivers)
 
 # COMMAND ----------
 
@@ -63,4 +76,4 @@ display(df_drivers)
 # COMMAND ----------
 
 # DBTITLE 1,Write output on parquet file in processed layer
-df_drivers.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/drivers")
+df_drivers.write.mode("overwrite").parquet(f"{processed_folder_path}/drivers")
