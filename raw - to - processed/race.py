@@ -4,9 +4,19 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Run the configuration notebook
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# DBTITLE 1,Run the functions notebook 
+# MAGIC %run "../includes/functions"
+
+# COMMAND ----------
+
 # DBTITLE 1,Importing Library and Functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DateType
-from pyspark.sql.functions import current_timestamp, to_timestamp, concat, col, lit
+from pyspark.sql.functions import to_timestamp, concat, col, lit
 
 # COMMAND ----------
 
@@ -27,7 +37,7 @@ races_schema = StructType(fields=[StructField("raceId", IntegerType(), False),
 df_races = spark.read \
 .option("header", True) \
 .schema(races_schema) \
-.csv("/mnt/adlsformula1/raw/races.csv")
+.csv(f"{raw_folder_path}/races.csv")
 
 # COMMAND ----------
 
@@ -35,12 +45,14 @@ display(df_races)
 
 # COMMAND ----------
 
-# DBTITLE 1,Creating new columns
-#creating new column data_load
-#creating new column raca_timestamp, it's a column that contains the combined value between data and time column
+# DBTITLE 1,Creating new column
+df_races = add_date_load(df_races)
 
-df_races = df_races.withColumn("date_load", current_timestamp()) \
-                                  .withColumn("race_timestamp", to_timestamp(concat(col('date'), lit(' '), col('time')), 'yyyy-MM-dd HH:mm:ss'))
+# COMMAND ----------
+
+# DBTITLE 1,Creating new column
+#creating new column raca_timestamp, it's a column that contains the combined value between data and time column
+df_races = df_races.withColumn("race_timestamp", to_timestamp(concat(col('date'), lit(' '), col('time')), 'yyyy-MM-dd HH:mm:ss'))
 
 # COMMAND ----------
 
@@ -58,4 +70,4 @@ display(df_races_selected)
 # COMMAND ----------
 
 # DBTITLE 1,Write the output to processed container in parquet format
-df_races_selected.write.mode('overwrite').partitionBy('race_year').parquet('/mnt/adlsformula1/processed/races')
+df_races_selected.write.mode('overwrite').partitionBy('race_year').parquet(f"{processed_folder_path}/races")
