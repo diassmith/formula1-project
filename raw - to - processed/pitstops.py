@@ -4,9 +4,18 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Run the configuration notebook
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# DBTITLE 1,Run the functions notebook 
+# MAGIC %run "../includes/functions"
+
+# COMMAND ----------
+
 # DBTITLE 1,Importing libraies and functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
-from pyspark.sql.functions import current_timestamp
 
 # COMMAND ----------
 
@@ -26,7 +35,7 @@ pit_stops_schema = StructType(fields=[StructField("raceId", IntegerType(), False
 df_pit_stops = spark.read \
 .schema(pit_stops_schema) \
 .option("multiLine", True) \
-.json("/mnt/adlsformula1/raw/pit_stops.json")
+.json(f"{raw_folder_path}/pit_stops.json")
 
 # COMMAND ----------
 
@@ -36,8 +45,11 @@ display(df_pit_stops)
 
 # DBTITLE 1,Renaming columns
 df_pit_stops = df_pit_stops.withColumnRenamed("driverId", "driver_id") \
-.withColumnRenamed("raceId", "race_id") \
-.withColumn("date_load", current_timestamp())
+.withColumnRenamed("raceId", "race_id")
+
+# COMMAND ----------
+
+df_pit_stops = add_date_load(df_pit_stops)
 
 # COMMAND ----------
 
@@ -46,4 +58,4 @@ display(df_pit_stops)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file
-df_pit_stops.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/pit_stops")
+df_pit_stops.write.mode("overwrite").parquet(f"{processed_folder_path}/pit_stops")
