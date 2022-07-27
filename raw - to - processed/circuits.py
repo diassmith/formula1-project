@@ -4,6 +4,16 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Run the configuration notebook 
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# DBTITLE 1,Run the functions notebook 
+# MAGIC %run "../includes/functions"
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### Reading the CSV file using the spark dataframe reader
 
@@ -12,7 +22,6 @@
 # DBTITLE 1,Importing Library
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
 from pyspark.sql.functions import col
-from pyspark.sql.functions import current_timestamp
 
 # COMMAND ----------
 
@@ -34,7 +43,7 @@ circuits_schema = StructType(fields =[StructField("circuitId", IntegerType(), Fa
 df_circuits = spark.read \
 .option("header", True) \
 .schema(circuits_schema) \
-.csv("/mnt/adlsformula1/raw/circuits.csv")
+.csv(f"{raw_folder_path}/circuits.csv")
 
 # COMMAND ----------
 
@@ -65,7 +74,7 @@ df_circuits_selected.show()
 # COMMAND ----------
 
 # DBTITLE 1,Creating new column to store the data load
-df_circuits_selected = df_circuits_selected.withColumn("date_load", current_timestamp()) 
+df_circuits_selected = add_ingestion_date(df_circuits_selected)
 
 # COMMAND ----------
 
@@ -74,4 +83,4 @@ display(df_circuits_selected)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file
-df_circuits_selected.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/circuits")
+df_circuits_selected.write.mode("overwrite").parquet(f"{processed_folder_path}/circuits")
