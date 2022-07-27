@@ -4,9 +4,18 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Run the configuration notebook
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
+# DBTITLE 1,Run the functions notebook 
+# MAGIC %run "../includes/functions"
+
+# COMMAND ----------
+
 # DBTITLE 1,Importing functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
-from pyspark.sql.functions import current_timestamp
 
 # COMMAND ----------
 
@@ -24,14 +33,18 @@ lap_times_schema = StructType(fields=[StructField("raceId", IntegerType(), False
 # DBTITLE 1,Reading folder
 df_lap_times = spark.read \
 .schema(lap_times_schema) \
-.csv("/mnt/adlsformula1/raw/lap_times")
+.csv(f"{raw_folder_path}/lap_times")
 
 # COMMAND ----------
 
-# DBTITLE 1,Renaming column and creating new column
+# DBTITLE 1,Renaming column
 df_lap_times = df_lap_times.withColumnRenamed("driverId", "driver_id") \
-.withColumnRenamed("raceId", "race_id") \
-.withColumn("date_load", current_timestamp())
+.withColumnRenamed("raceId", "race_id")
+
+# COMMAND ----------
+
+# DBTITLE 1,Creating new column
+df_lap_times = add_date_load(df_lap_times)
 
 # COMMAND ----------
 
@@ -40,4 +53,4 @@ display(df_lap_times)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file
-df_lap_times.write.mode("overwrite").parquet("/mnt/adlsformula1/processed/lap_times")
+df_lap_times.write.mode("overwrite").parquet(f"{processed_folder_path}/lap_times")
