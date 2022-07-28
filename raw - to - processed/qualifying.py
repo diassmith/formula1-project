@@ -4,6 +4,12 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating parameters
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../includes/configuration"
 
@@ -41,11 +47,12 @@ df_qualifying = spark.read\
 
 # COMMAND ----------
 
-# DBTITLE 1,Renaming column
+# DBTITLE 1,Renaming column and creating new column 
 df_qualifying = df_qualifying.withColumnRenamed("qualifyId", "qualify_id") \
 .withColumnRenamed("driverId", "driver_id") \
 .withColumnRenamed("raceId", "race_id") \
-.withColumnRenamed("constructorId", "constructor_id")
+.withColumnRenamed("constructorId", "constructor_id") \
+.withColumn("data_source", lit(v_data_source))
 
 # COMMAND ----------
 
@@ -56,3 +63,7 @@ df_qualifying = add_date_load(df_qualifying)
 
 # DBTITLE 1,write output parquet file
 df_qualifying.write.mode("overwrite").parquet(f"{processed_folder_path}/qualifying")
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Sucess")
