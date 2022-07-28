@@ -4,6 +4,12 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating Parameters
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook 
 # MAGIC %run "../includes/configuration"
 
@@ -21,7 +27,7 @@
 
 # DBTITLE 1,Importing Library
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, lit
 
 # COMMAND ----------
 
@@ -62,10 +68,11 @@ df_circuits_selected.show()
 
 # DBTITLE 1,Renaming the columns
 df_circuits_selected = df_circuits_selected.withColumnRenamed("circuitId", "circuit_id")\
-.withColumnRenamed("circuitRef", "circuit_ref") \
-.withColumnRenamed("lat", "latitude") \
-.withColumnRenamed("lng", "longitude") \
-.withColumnRenamed("alt", "altitude") 
+.withColumnRenamed("circuitRef", "circuit_ref")\
+.withColumnRenamed("lat", "latitude")\
+.withColumnRenamed("lng", "longitude")\
+.withColumnRenamed("alt", "altitude")\
+.withColumn("data_source", lit(v_data_source))
 
 # COMMAND ----------
 
@@ -84,3 +91,7 @@ display(df_circuits_selected)
 
 # DBTITLE 1,Write output parquet file
 df_circuits_selected.write.mode("overwrite").parquet(f"{processed_folder_path}/circuits")
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Sucess")

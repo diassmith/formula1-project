@@ -4,6 +4,12 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating parameters
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../includes/configuration"
 
@@ -53,7 +59,7 @@ display(df_results)
 
 # COMMAND ----------
 
-# DBTITLE 1,Renaming the column and creating data_load column
+# DBTITLE 1,Renaming the column and creating new column
 df_results = df_results.withColumnRenamed("resultId", "result_id") \
                                     .withColumnRenamed("raceId", "race_id") \
                                     .withColumnRenamed("driverId", "driver_id") \
@@ -62,7 +68,8 @@ df_results = df_results.withColumnRenamed("resultId", "result_id") \
                                     .withColumnRenamed("positionOrder", "position_order") \
                                     .withColumnRenamed("fastestLap", "fastest_lap") \
                                     .withColumnRenamed("fastestLapTime", "fastest_lap_time") \
-                                    .withColumnRenamed("fastestLapSpeed", "fastest_lap_speed")
+                                    .withColumnRenamed("fastestLapSpeed", "fastest_lap_speed") \
+.withColumn("data_source", lit(v_data_source))
 
 # COMMAND ----------
 
@@ -82,3 +89,7 @@ display(df_results)
 
 # DBTITLE 1,Write output parquet file with partition by race_id
 df_results.write.mode("overwrite").partitionBy('race_id').parquet(f"{processed_folder_path}/results")
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Sucess")

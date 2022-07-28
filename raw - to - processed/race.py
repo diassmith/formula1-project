@@ -4,6 +4,12 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating parameters
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../includes/configuration"
 
@@ -52,7 +58,8 @@ df_races = add_date_load(df_races)
 
 # DBTITLE 1,Creating new column
 #creating new column raca_timestamp, it's a column that contains the combined value between data and time column
-df_races = df_races.withColumn("race_timestamp", to_timestamp(concat(col('date'), lit(' '), col('time')), 'yyyy-MM-dd HH:mm:ss'))
+df_races = df_races.withColumn("race_timestamp", to_timestamp(concat(col('date'), lit(' '), col('time')), 'yyyy-MM-dd HH:mm:ss')) \
+.withColumn("data_source", lit(v_data_source))
 
 # COMMAND ----------
 
@@ -71,3 +78,7 @@ display(df_races_selected)
 
 # DBTITLE 1,Write the output to processed container in parquet format
 df_races_selected.write.mode('overwrite').partitionBy('race_year').parquet(f"{processed_folder_path}/races")
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Sucess")
