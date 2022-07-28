@@ -52,3 +52,11 @@ v_result = dbutils.notebook.run("race", 0, {"p_data_source": "Ergast API"})
 # COMMAND ----------
 
 v_result
+
+# COMMAND ----------
+
+v_result = dbutils.notebook.run("results", 0, {"p_data_source": "Ergast API"})
+
+# COMMAND ----------
+
+v_result
