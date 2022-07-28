@@ -4,6 +4,11 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../includes/configuration"
 
@@ -37,9 +42,10 @@ df_lap_times = spark.read \
 
 # COMMAND ----------
 
-# DBTITLE 1,Renaming column
+# DBTITLE 1,Renaming column and creating new column
 df_lap_times = df_lap_times.withColumnRenamed("driverId", "driver_id") \
-.withColumnRenamed("raceId", "race_id")
+.withColumnRenamed("raceId", "race_id") \
+.withColumn("data_source", lit(v_data_source))
 
 # COMMAND ----------
 
@@ -54,3 +60,7 @@ display(df_lap_times)
 
 # DBTITLE 1,Write output parquet file
 df_lap_times.write.mode("overwrite").parquet(f"{processed_folder_path}/lap_times")
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Sucess")
