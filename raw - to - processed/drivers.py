@@ -4,6 +4,12 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating parameters
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../includes/configuration"
 
@@ -54,7 +60,8 @@ display(df_drivers)
 # DBTITLE 1,Renaming  the columns
 df_drivers = df_drivers.withColumnRenamed("driverId", "driver_id") \
                                     .withColumnRenamed("driverRef", "driver_ref") \
-                                    .withColumn("name", concat(col("name.forename"), lit(" "), col("name.surname")))
+                                    .withColumn("name", concat(col("name.forename"), lit(" "), col("name.surname")))\
+.withColumn("data_source", lit(v_data_source))
 
 # COMMAND ----------
 
@@ -78,3 +85,7 @@ display(df_drivers)
 
 # DBTITLE 1,Write output on parquet file in processed layer
 df_drivers.write.mode("overwrite").parquet(f"{processed_folder_path}/drivers")
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Sucess")
