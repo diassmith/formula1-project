@@ -4,6 +4,7 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating parameters
 dbutils.widgets.text("p_data_source", "")
 v_data_source = dbutils.widgets.get("p_data_source")
 

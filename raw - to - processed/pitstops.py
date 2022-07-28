@@ -4,6 +4,12 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating parameters
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get("p_data_source")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../includes/configuration"
 
@@ -43,9 +49,10 @@ display(df_pit_stops)
 
 # COMMAND ----------
 
-# DBTITLE 1,Renaming columns
+# DBTITLE 1,Renaming columns and creating new column
 df_pit_stops = df_pit_stops.withColumnRenamed("driverId", "driver_id") \
-.withColumnRenamed("raceId", "race_id")
+.withColumnRenamed("raceId", "race_id") \
+.withColumn("data_source", lit(v_data_source))
 
 # COMMAND ----------
 
@@ -60,3 +67,7 @@ display(df_pit_stops)
 
 # DBTITLE 1,Write output parquet file
 df_pit_stops.write.mode("overwrite").parquet(f"{processed_folder_path}/pit_stops")
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Sucess")
