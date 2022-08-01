@@ -43,7 +43,7 @@ races_schema = StructType(fields=[StructField("raceId", IntegerType(), False),
 df_races = spark.read \
 .option("header", True) \
 .schema(races_schema) \
-.csv(f"{raw_folder_path}/races.csv")
+.csv(f"{bronze_folder_path}/races.csv")
 
 # COMMAND ----------
 
@@ -77,7 +77,7 @@ display(df_races_selected)
 # COMMAND ----------
 
 # DBTITLE 1,Write the output to processed container in parquet format
-df_races_selected.write.mode('overwrite').partitionBy('race_year').parquet(f"{processed_folder_path}/races")
+df_races_selected.write.mode('overwrite').partitionBy('race_year').parquet(f"{silver_folder_path}/races")
 
 # COMMAND ----------
 
