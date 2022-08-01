@@ -5,7 +5,6 @@ client_id       = dbutils.secrets.get(scope="formula1-scope", key="clientId-Secr
 tenant_id       = dbutils.secrets.get(scope="formula1-scope", key="tenantId-Secret")
 client_secret   = dbutils.secrets.get(scope="formula1-scope", key="client-Secret")
 
-
 # COMMAND ----------
 
 # DBTITLE 1,Doing connection
@@ -28,21 +27,26 @@ def mount_adls(container_name):
 
 # DBTITLE 1,Checking the dbfs
 # MAGIC 
-# MAGIC %fs ls mnt/adlsformula1
+# MAGIC %fs ls mnt/adlsformula1/bronze
 # MAGIC  
 
 # COMMAND ----------
 
 # DBTITLE 1,call the function to create mount
-#mount_adls("raw")
-#mount_adls("processed")
-#mount_adls("trusted")
+mount_adls("bronze")
+mount_adls("silver")
+mount_adls("gold")
 
 # COMMAND ----------
 
-#dbutils.fs.ls("/mnt/adlsformula1")
+dbutils.fs.ls("/mnt/adlsformula1")
 
 # COMMAND ----------
 
-#dbutils.fs.unmount("/mnt/adlsformula1/raw")
-#dbutils.fs.unmount("/mnt/adlsformula1/processed")
+#dbutils.fs.rm("/mnt/adlsformula1", True)
+
+# COMMAND ----------
+
+#dbutils.fs.unmount("/mnt/adlsformula1/gold")
+#dbutils.fs.unmount("/mnt/adlsformula1/silver")
+#dbutils.fs.unmount("/mnt/adlsformula1/bronze")
