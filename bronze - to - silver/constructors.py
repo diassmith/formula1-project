@@ -28,7 +28,7 @@ constructors_schema = "constructorId INT, constructorRef STRING, name STRING, na
 # DBTITLE 1,Reading file
 df_constructors = spark.read\
 .schema(constructors_schema)\
-.json(f"{raw_folder_path}/constructors.json")
+.json(f"{bronze_folder_path}/constructors.json")
 
 # COMMAND ----------
 
@@ -67,7 +67,7 @@ display(df_constructors)
 # COMMAND ----------
 
 # DBTITLE 1,Write output to parquet file
-df_constructors.write.mode("overwrite").parquet(f"{processed_folder_path}/constructors")
+df_constructors.write.mode("overwrite").parquet(f"{silver_folder_path}/constructors")
 
 # COMMAND ----------
 
