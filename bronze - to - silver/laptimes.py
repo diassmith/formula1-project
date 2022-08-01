@@ -22,6 +22,7 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # DBTITLE 1,Importing functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+from pyspark.sql.functions import lit
 
 # COMMAND ----------
 
