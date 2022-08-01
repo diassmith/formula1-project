@@ -37,7 +37,7 @@ display(df_constructors)
 # COMMAND ----------
 
 # DBTITLE 1,Importing Libraries and Functions
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, lit
 
 # COMMAND ----------
 
