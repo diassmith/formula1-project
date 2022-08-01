@@ -22,7 +22,7 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # DBTITLE 1,Importing libraries and functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, FloatType
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, lit
 
 # COMMAND ----------
 
@@ -51,7 +51,7 @@ results_schema = StructType(fields=[StructField("resultId", IntegerType(), False
 # DBTITLE 1,Reading file
 df_results = spark.read\
 .schema(results_schema)\
-.json(f"{raw_folder_path}/results.json")
+.json(f"{bronze_folder_path}/results.json")
 
 # COMMAND ----------
 
@@ -88,7 +88,7 @@ display(df_results)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file with partition by race_id
-df_results.write.mode("overwrite").partitionBy('race_id').parquet(f"{processed_folder_path}/results")
+df_results.write.mode("overwrite").partitionBy('race_id').parquet(f"{silver_folder_path}/results")
 
 # COMMAND ----------
 

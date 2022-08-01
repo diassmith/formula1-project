@@ -22,6 +22,7 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # DBTITLE 1,Importing libraies and functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+from pyspark.sql.functions import lit
 
 # COMMAND ----------
 
@@ -41,7 +42,7 @@ pit_stops_schema = StructType(fields=[StructField("raceId", IntegerType(), False
 df_pit_stops = spark.read \
 .schema(pit_stops_schema) \
 .option("multiLine", True) \
-.json(f"{raw_folder_path}/pit_stops.json")
+.json(f"{bronze_folder_path}/pit_stops.json")
 
 # COMMAND ----------
 
@@ -66,7 +67,7 @@ display(df_pit_stops)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file
-df_pit_stops.write.mode("overwrite").parquet(f"{processed_folder_path}/pit_stops")
+df_pit_stops.write.mode("overwrite").parquet(f"{silver_folder_path}/pit_stops")
 
 # COMMAND ----------
 

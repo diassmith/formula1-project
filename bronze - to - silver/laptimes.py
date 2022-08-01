@@ -22,6 +22,7 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # DBTITLE 1,Importing functions
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+from pyspark.sql.functions import lit
 
 # COMMAND ----------
 
@@ -39,7 +40,7 @@ lap_times_schema = StructType(fields=[StructField("raceId", IntegerType(), False
 # DBTITLE 1,Reading folder
 df_lap_times = spark.read \
 .schema(lap_times_schema) \
-.csv(f"{raw_folder_path}/lap_times")
+.csv(f"{bronze_folder_path}/lap_times")
 
 # COMMAND ----------
 
@@ -60,7 +61,7 @@ display(df_lap_times)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file
-df_lap_times.write.mode("overwrite").parquet(f"{processed_folder_path}/lap_times")
+df_lap_times.write.mode("overwrite").parquet(f"{silver_folder_path}/lap_times")
 
 # COMMAND ----------
 
