@@ -43,7 +43,7 @@ qualifying_schema = StructType(fields=[StructField("qualifyId", IntegerType(), F
 df_qualifying = spark.read\
 .schema(qualifying_schema)\
 .option("multiLine", True)\
-.json(f"{raw_folder_path}/qualifying")
+.json(f"{bronze_folder_path}/qualifying")
 
 # COMMAND ----------
 
@@ -62,7 +62,7 @@ df_qualifying = add_date_load(df_qualifying)
 # COMMAND ----------
 
 # DBTITLE 1,write output parquet file
-df_qualifying.write.mode("overwrite").parquet(f"{processed_folder_path}/qualifying")
+df_qualifying.write.mode("overwrite").parquet(f"{silver_folder_path}/qualifying")
 
 # COMMAND ----------
 
