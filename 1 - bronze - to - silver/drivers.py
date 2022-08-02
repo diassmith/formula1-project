@@ -11,12 +11,12 @@ v_data_source = dbutils.widgets.get("p_data_source")
 # COMMAND ----------
 
 # DBTITLE 1,Run the configuration notebook
-# MAGIC %run "../includes/configuration"
+# MAGIC %run "../0 - includes/configuration"
 
 # COMMAND ----------
 
 # DBTITLE 1,Run the functions notebook 
-# MAGIC %run "../includes/functions"
+# MAGIC %run "../0 - includes/functions"
 
 # COMMAND ----------
 
