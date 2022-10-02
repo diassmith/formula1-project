@@ -26,6 +26,7 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Create Circuits Table
 # MAGIC %sql
 # MAGIC CREATE TABLE IF NOT EXISTS f1_bronze.circuits(circuitId INT,
 # MAGIC circuitRef STRING,
@@ -52,6 +53,7 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Create Races Table 
 # MAGIC %sql
 # MAGIC DROP TABLE IF EXISTS f1_bronze.races;
 # MAGIC CREATE TABLE IF NOT EXISTS f1_bronze.races(raceId INT,
@@ -70,3 +72,75 @@
 
 # MAGIC %sql
 # MAGIC SELECT * FROM f1_bronze.races
+
+# COMMAND ----------
+
+# DBTITLE 1,Create contructors table
+# MAGIC %sql
+# MAGIC DROP TABLE IF EXISTS f1_bronze.constructors;
+# MAGIC CREATE TABLE IF NOT EXISTS f1_bronze.constructors(
+# MAGIC constructorId INT,
+# MAGIC constructorRef STRING,
+# MAGIC name STRING,
+# MAGIC nationality STRING,
+# MAGIC url STRING)
+# MAGIC USING json
+# MAGIC OPTIONS(path "/mnt/adlsformula1/bronze/constructors.json")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM f1_bronze.constructors
+
+# COMMAND ----------
+
+# DBTITLE 1,Create Drivers Table
+# MAGIC %sql
+# MAGIC DROP TABLE IF EXISTS f1_bronze.drivers;
+# MAGIC CREATE TABLE IF NOT EXISTS f1_bronze.drivers(
+# MAGIC driverId INT,
+# MAGIC driverRef STRING,
+# MAGIC number INT,
+# MAGIC code STRING,
+# MAGIC name STRUCT<forename: STRING, surname: STRING>,
+# MAGIC dob DATE,
+# MAGIC nationality STRING,
+# MAGIC url STRING)
+# MAGIC USING json
+# MAGIC OPTIONS (path "/mnt/adlsformula1/bronze/drivers.json")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM f1_bronze.drivers
+
+# COMMAND ----------
+
+# DBTITLE 1,Create Results Table
+# MAGIC %sql
+# MAGIC DROP TABLE IF EXISTS f1_bronze.results;
+# MAGIC CREATE TABLE IF NOT EXISTS f1_bronze.results(
+# MAGIC resultId INT,
+# MAGIC raceId INT,
+# MAGIC driverId INT,
+# MAGIC constructorId INT,
+# MAGIC number INT,grid INT,
+# MAGIC position INT,
+# MAGIC positionText STRING,
+# MAGIC positionOrder INT,
+# MAGIC points INT,
+# MAGIC laps INT,
+# MAGIC time STRING,
+# MAGIC milliseconds INT,
+# MAGIC fastestLap INT,
+# MAGIC rank INT,
+# MAGIC fastestLapTime STRING,
+# MAGIC fastestLapSpeed FLOAT,
+# MAGIC statusId STRING)
+# MAGIC USING json
+# MAGIC OPTIONS(path "/mnt/adlsformula1/bronze/results.json")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM f1_bronze.results
