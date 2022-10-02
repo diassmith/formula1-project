@@ -94,4 +94,8 @@ df_circuits_selected.write.mode("overwrite").parquet(f"{silver_folder_path}/circ
 
 # COMMAND ----------
 
+df_circuits_selected.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.circuits")
+
+# COMMAND ----------
+
 dbutils.notebook.exit("Sucess")

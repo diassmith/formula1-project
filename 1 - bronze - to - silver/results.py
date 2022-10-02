@@ -88,7 +88,11 @@ display(df_results)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file with partition by race_id
-df_results.write.mode("overwrite").partitionBy('race_id').parquet(f"{silver_folder_path}/results")
+#df_results.write.mode("overwrite").partitionBy('race_id').parquet(f"{silver_folder_path}/results")
+
+# COMMAND ----------
+
+df_results.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.results")
 
 # COMMAND ----------
 

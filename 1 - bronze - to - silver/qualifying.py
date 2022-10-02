@@ -63,7 +63,11 @@ df_qualifying = add_date_load(df_qualifying)
 # COMMAND ----------
 
 # DBTITLE 1,write output parquet file
-df_qualifying.write.mode("overwrite").parquet(f"{silver_folder_path}/qualifying")
+#df_qualifying.write.mode("overwrite").parquet(f"{silver_folder_path}/qualifying")
+
+# COMMAND ----------
+
+df_qualifying.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.qualifying")
 
 # COMMAND ----------
 

@@ -67,7 +67,11 @@ display(df_pit_stops)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file
-df_pit_stops.write.mode("overwrite").parquet(f"{silver_folder_path}/pit_stops")
+#df_pit_stops.write.mode("overwrite").parquet(f"{silver_folder_path}/pit_stops")
+
+# COMMAND ----------
+
+df_pit_stops.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.pit_stops")
 
 # COMMAND ----------
 
