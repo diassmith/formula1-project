@@ -84,7 +84,11 @@ display(df_drivers)
 # COMMAND ----------
 
 # DBTITLE 1,Write output on parquet file in processed layer
-df_drivers.write.mode("overwrite").parquet(f"{silver_folder_path}/drivers")
+#df_drivers.write.mode("overwrite").parquet(f"{silver_folder_path}/drivers")
+
+# COMMAND ----------
+
+df_drivers.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.drivers")
 
 # COMMAND ----------
 

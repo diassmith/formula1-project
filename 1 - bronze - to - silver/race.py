@@ -77,7 +77,11 @@ display(df_races_selected)
 # COMMAND ----------
 
 # DBTITLE 1,Write the output to processed container in parquet format
-df_races_selected.write.mode('overwrite').partitionBy('race_year').parquet(f"{silver_folder_path}/races")
+#df_races_selected.write.mode('overwrite').partitionBy('race_year').parquet(f"{silver_folder_path}/races")
+
+# COMMAND ----------
+
+df_races_selected.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.races")
 
 # COMMAND ----------
 

@@ -67,7 +67,11 @@ display(df_constructors)
 # COMMAND ----------
 
 # DBTITLE 1,Write output to parquet file
-df_constructors.write.mode("overwrite").parquet(f"{silver_folder_path}/constructors")
+#df_constructors.write.mode("overwrite").parquet(f"{silver_folder_path}/constructors")
+
+# COMMAND ----------
+
+df_constructors.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.constructors")
 
 # COMMAND ----------
 

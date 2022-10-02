@@ -144,3 +144,68 @@
 
 # MAGIC %sql
 # MAGIC SELECT * FROM f1_bronze.results
+
+# COMMAND ----------
+
+# DBTITLE 1,Create Piststops Table
+# MAGIC %sql
+# MAGIC DROP TABLE IF EXISTS f1_bronze.pit_stops;
+# MAGIC CREATE TABLE IF NOT EXISTS f1_bronze.pit_stops(
+# MAGIC driverId INT,
+# MAGIC duration STRING,
+# MAGIC lap INT,
+# MAGIC milliseconds INT,
+# MAGIC raceId INT,
+# MAGIC stop INT,
+# MAGIC time STRING)
+# MAGIC USING json
+# MAGIC OPTIONS(path "/mnt/adlsformula1/bronze/pit_stops.json", multiLine true)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM f1_bronze.pit_stops
+
+# COMMAND ----------
+
+# DBTITLE 1,Create lap_times table 
+# MAGIC %sql
+# MAGIC DROP TABLE IF EXISTS f1_bronze.lap_times;
+# MAGIC CREATE TABLE IF NOT EXISTS f1_bronze.lap_times(
+# MAGIC raceId INT,
+# MAGIC driverId INT,
+# MAGIC lap INT,
+# MAGIC position INT,
+# MAGIC time STRING,
+# MAGIC milliseconds INT
+# MAGIC )
+# MAGIC USING csv
+# MAGIC OPTIONS (path "/mnt/adlsformula1/bronze/lap_times")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM f1_bronze.lap_times
+
+# COMMAND ----------
+
+# DBTITLE 1,Create qualifying table
+# MAGIC %sql
+# MAGIC DROP TABLE IF EXISTS f1_bronze.qualifying;
+# MAGIC CREATE TABLE IF NOT EXISTS f1_bronze.qualifying(
+# MAGIC constructorId INT,
+# MAGIC driverId INT,
+# MAGIC number INT,
+# MAGIC position INT,
+# MAGIC q1 STRING,
+# MAGIC q2 STRING,
+# MAGIC q3 STRING,
+# MAGIC qualifyId INT,
+# MAGIC raceId INT)
+# MAGIC USING json
+# MAGIC OPTIONS (path "/mnt/adlsformula1/bronze//qualifying", multiLine true)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM f1_bronze.qualifying
