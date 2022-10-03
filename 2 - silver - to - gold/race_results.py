@@ -93,4 +93,8 @@ display(df_final.filter("race_year == 2020 and race_name == 'Abu Dhabi Grand Pri
 # COMMAND ----------
 
 # DBTITLE 1,Write output in Gold Layer
-df_final.write.mode("overwrite").parquet(f"{gold_folder_path}/race_results")
+#df_final.write.mode("overwrite").parquet(f"{gold_folder_path}/race_results")
+
+# COMMAND ----------
+
+df_final.write.mode("overwrite").format("parquet").saveAsTable("f1_gold.race_results")
