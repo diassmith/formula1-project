@@ -40,4 +40,9 @@ display(df_final.filter("race_year = 2020"))
 
 # COMMAND ----------
 
-df_final.write.mode("overwrite").parquet(f"{gold_folder_path}/constructor_standings")
+# DBTITLE 1,Write output parquet file in gold
+#df_final.write.mode("overwrite").parquet(f"{gold_folder_path}/constructor_standings")
+
+# COMMAND ----------
+
+df_final.write.mode("overwrite").format("parquet").saveAsTable("f1_gold.constructor_standings")
