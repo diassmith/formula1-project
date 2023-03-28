@@ -51,7 +51,7 @@ results_schema = StructType(fields=[StructField("resultId", IntegerType(), False
 # DBTITLE 1,Reading file
 df_results = spark.read\
 .schema(results_schema)\
-.json(f"{bronze_folder_path}/results.json")
+.json(f"{landing_folder_path}/results.json")
 
 # COMMAND ----------
 
@@ -88,11 +88,11 @@ display(df_results)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file with partition by race_id
-#df_results.write.mode("overwrite").partitionBy('race_id').parquet(f"{silver_folder_path}/results")
+#df_results.write.mode("overwrite").partitionBy('race_id').parquet(f"{bronze_folder_path}/results")
 
 # COMMAND ----------
 
-df_results.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.results")
+df_results.write.mode("overwrite").format("parquet").saveAsTable("f1_bronze.results")
 
 # COMMAND ----------
 
