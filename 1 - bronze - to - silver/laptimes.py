@@ -40,7 +40,7 @@ lap_times_schema = StructType(fields=[StructField("raceId", IntegerType(), False
 # DBTITLE 1,Reading folder
 df_lap_times = spark.read \
 .schema(lap_times_schema) \
-.csv(f"{bronze_folder_path}/lap_times")
+.csv(f"{landing_folder_path}/lap_times")
 
 # COMMAND ----------
 
@@ -61,11 +61,11 @@ display(df_lap_times)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file
-#df_lap_times.write.mode("overwrite").parquet(f"{silver_folder_path}/lap_times")
+#df_lap_times.write.mode("overwrite").parquet(f"{bronze_folder_path}/lap_times")
 
 # COMMAND ----------
 
-df_lap_times.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.lap_times")
+df_lap_times.write.mode("overwrite").format("parquet").saveAsTable("f1_bronze.lap_times")
 
 # COMMAND ----------
 

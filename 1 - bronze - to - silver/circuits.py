@@ -49,7 +49,7 @@ circuits_schema = StructType(fields =[StructField("circuitId", IntegerType(), Fa
 df_circuits = spark.read \
 .option("header", True) \
 .schema(circuits_schema) \
-.csv(f"{bronze_folder_path}/circuits.csv")
+.csv(f"{landing_folder_path}/circuits.csv")
 
 # COMMAND ----------
 
@@ -90,11 +90,11 @@ display(df_circuits_selected)
 # COMMAND ----------
 
 # DBTITLE 1,Write output parquet file
-df_circuits_selected.write.mode("overwrite").parquet(f"{silver_folder_path}/circuits")
+#df_circuits_selected.write.mode("overwrite").parquet(f"{bronze_folder_path}/circuits")
 
 # COMMAND ----------
 
-df_circuits_selected.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.circuits")
+df_circuits_selected.write.mode("overwrite").format("parquet").saveAsTable("f1_bronze.circuits")
 
 # COMMAND ----------
 
