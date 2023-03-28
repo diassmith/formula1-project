@@ -25,21 +25,22 @@ def mount_adls(container_name):
 
 # COMMAND ----------
 
-# DBTITLE 1,Checking the dbfs
-# MAGIC 
-# MAGIC %fs ls mnt/adlsformula1/bronze
-# MAGIC  
-
-# COMMAND ----------
-
 # DBTITLE 1,call the function to create mount
-mount_adls("bronze")
-mount_adls("silver")
-mount_adls("gold")
+# mount_adls("landing")
+# mount_adls("bronze")
+# mount_adls("silver")
+# mount_adls("gold")
 
 # COMMAND ----------
 
-dbutils.fs.ls("/mnt/adlsformula1")
+# DBTITLE 1,Checking the dbfs
+
+#%fs ls mnt/adlsformula1/landing
+ 
+
+# COMMAND ----------
+
+#dbutils.fs.ls("/mnt/adlsformula1")
 
 # COMMAND ----------
 
