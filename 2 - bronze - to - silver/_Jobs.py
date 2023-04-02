@@ -47,7 +47,7 @@ v_result
 
 # COMMAND ----------
 
-# v_result = dbutils.notebook.run("race", 0)
+v_result = dbutils.notebook.run("race", 0)
 
 # COMMAND ----------
 
@@ -55,7 +55,7 @@ v_result
 
 # COMMAND ----------
 
-# v_result = dbutils.notebook.run("results", 0)
+v_result = dbutils.notebook.run("results", 0)
 
 # COMMAND ----------
 
