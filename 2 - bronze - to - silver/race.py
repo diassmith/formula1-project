@@ -21,10 +21,13 @@ from pyspark.sql.functions import to_timestamp, concat, col, lit
 # COMMAND ----------
 
 # DBTITLE 1,Reading file
-df_races = spark.read \
-.option("header", True) \
-.schema(races_schema) \
-.csv(f"{bronze_folder_path}/races.csv")
+# df_races = spark.read \
+# .option("header", True) \
+# .schema(races_schema) \
+# .csv(f"{bronze_folder_path}/races.csv")
+
+
+df_races = spark.read.parquet(f"{bronze_folder_path}/races")
 
 # COMMAND ----------
 
@@ -33,14 +36,9 @@ df_races = spark.read \
 # COMMAND ----------
 
 # DBTITLE 1,Creating new column
-df_races = add_date_load_silver(df_races)
-
-# COMMAND ----------
-
-# DBTITLE 1,Creating new column
+df_races = add_date_load_silver(df_races)\
+.withColumn("race_timestamp", to_timestamp(concat(col('date'), lit(' '), col('time')), 'yyyy-MM-dd HH:mm:ss'))
 #creating new column raca_timestamp, it's a column that contains the combined value between data and time column
-df_races = df_races.withColumn("race_timestamp", to_timestamp(concat(col('date'), lit(' '), col('time')), 'yyyy-MM-dd HH:mm:ss')) \
-.withColumn("data_source", lit(v_data_source))
 
 # COMMAND ----------
 
@@ -49,7 +47,7 @@ display(df_races)
 # COMMAND ----------
 
 # DBTITLE 1,Selecting the all columns that I'll use.
-df_races_selected = df_races.select(col('raceId').alias('race_id'), col('year').alias('race_year'),col('round'), col('circuitId').alias('circuit_id'),col('name'), col('date_load'), col('race_timestamp'))
+df_races_selected = df_races.select(col('raceId').alias('race_id'), col('year').alias('race_year'),col('round'), col('circuitId').alias('circuit_id'),col('name'), col('date_load_silver'), col('race_timestamp'))
 
 # COMMAND ----------
 
