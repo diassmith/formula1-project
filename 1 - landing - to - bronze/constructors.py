@@ -10,6 +10,11 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_file_date", "2021-03-21")
+v_file_date = dbutils.widgets.get("p_file_date")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../0 - includes/configuration"
 
@@ -30,9 +35,9 @@ constructors_schema = "constructorId INT, constructorRef STRING, name STRING, na
 # COMMAND ----------
 
 # DBTITLE 1,Reading file
-df_constructors = spark.read\
-.schema(constructors_schema)\
-.json(f"{landing_folder_path}/constructors.json")
+df_constructors = (spark.read
+                   .schema(constructors_schema)
+                   .json(f"{landing_folder_path}/{v_file_date}/constructors.json"))
 
 # COMMAND ----------
 
@@ -41,8 +46,9 @@ display(df_constructors)
 # COMMAND ----------
 
 # DBTITLE 1,Creating new column
-df_constructors = add_date_load_bronze(df_constructors)\
-.withColumn("data_source", lit(v_data_source))
+df_constructors = (add_date_load_bronze(df_constructors)
+                   .withColumn("data_source", lit(v_data_source))
+                   .withColumn("file_date", lit(v_file_date)))
 
 # COMMAND ----------
 

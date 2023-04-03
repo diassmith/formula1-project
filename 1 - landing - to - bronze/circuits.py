@@ -10,6 +10,11 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_file_date", "2021-03-21")
+v_file_date = dbutils.widgets.get("p_file_date")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook 
 # MAGIC %run "../0 - includes/configuration"
 
@@ -46,10 +51,10 @@ circuits_schema = StructType(fields =[StructField("circuitId", IntegerType(), Fa
 # COMMAND ----------
 
 # DBTITLE 1,Reading the file
-df_circuits = spark.read \
-.option("header", True) \
-.schema(circuits_schema) \
-.csv(f"{landing_folder_path}/circuits.csv")
+df_circuits = (spark.read
+               .option("header", True)
+               .schema(circuits_schema)
+               .csv(f"{landing_folder_path}/{v_file_date}/circuits.csv"))
 
 # COMMAND ----------
 
@@ -58,8 +63,9 @@ df_circuits.printSchema()
 # COMMAND ----------
 
 # DBTITLE 1,Creating new column to store the data load
-df_circuits = add_date_load_bronze(df_circuits)\
-.withColumn("data_source", lit(v_data_source))
+df_circuits = (add_date_load_bronze(df_circuits)
+               .withColumn("data_source", lit(v_data_source))
+               .withColumn("file_date", lit(v_file_date)))
 
 # COMMAND ----------
 
