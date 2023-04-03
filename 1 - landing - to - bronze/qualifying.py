@@ -10,6 +10,11 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_file_date", "2021-03-21")
+v_file_date = dbutils.widgets.get("p_file_date")
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../0 - includes/configuration"
 
@@ -41,16 +46,17 @@ qualifying_schema = StructType(fields=[StructField("qualifyId", IntegerType(), F
 # COMMAND ----------
 
 # DBTITLE 1,Reading folder
-df_qualifying = spark.read\
-.schema(qualifying_schema)\
-.option("multiLine", True)\
-.json(f"{landing_folder_path}/qualifying")
+df_qualifying = (spark.read
+                 .schema(qualifying_schema)
+                 .option("multiLine", True)
+                 .json(f"{landing_folder_path}/{v_file_date}/qualifying"))
 
 # COMMAND ----------
 
 # DBTITLE 1,Creating column
-df_qualifying = add_date_load_bronze(df_qualifying)\
-.withColumn("data_source", lit(v_data_source))
+df_qualifying = (add_date_load_bronze(df_qualifying)
+                 .withColumn("data_source", lit(v_data_source))
+                 .withColumn("file_date", lit(v_file_date)))
 
 # COMMAND ----------
 
