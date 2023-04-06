@@ -69,6 +69,10 @@ df_circuits = (add_date_load_bronze(df_circuits)
 
 # COMMAND ----------
 
+df_circuits.printSchema()
+
+# COMMAND ----------
+
 display(df_circuits)
 
 # COMMAND ----------
@@ -83,3 +87,9 @@ df_circuits.write.mode("overwrite").format("parquet").saveAsTable("f1_bronze.cir
 # COMMAND ----------
 
 dbutils.notebook.exit("Sucess")
+
+# COMMAND ----------
+
+# %sql
+# SELECT * FROM f1_bronze.circuits
+# WHERE file
