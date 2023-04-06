@@ -58,7 +58,7 @@ display(df_pit_stops)
 # DBTITLE 1,Creating new column
 df_pit_stops = (add_date_load_bronze(df_pit_stops)
                 .withColumn("data_source", lit(v_data_source))
-                .withColumn("file_date", lit(v_file_date))
+                .withColumn("file_date", lit(v_file_date)))
 
 # COMMAND ----------
 
