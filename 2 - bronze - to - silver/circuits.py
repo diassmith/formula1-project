@@ -4,6 +4,10 @@
 
 # COMMAND ----------
 
+from delta.tables import *
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook 
 # MAGIC %run "../0 - includes/configuration"
 
@@ -35,7 +39,7 @@ df_circuits.printSchema()
 # COMMAND ----------
 
 # DBTITLE 1,Selected the columns
-df_circuits_selected = df_circuits.select(col("circuitId"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt"), col("data_source"))
+df_circuits_selected = df_circuits.select(col("circuitId"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt"), col("file_date"))
 
 # COMMAND ----------
 
@@ -70,16 +74,12 @@ display(df_circuits_selected)
 
 # COMMAND ----------
 
-from delta.tables import *
-
-df_target = DeltaTable.forPath(spark, 'f1_silver.circuits')
-
-# COMMAND ----------
-
 if spark.catalog.tableExists("f1_silver.circuits"):
-    upsert()
-    
+    df_target = DeltaTable.forPath(spark, 'f1_silver.circuits')
+    print("upsert")
+    upsert(df_target,circuit_id,df_circuits_selected,circuit_id)
 else:
+    print("New")
     df_circuits_selected.write.mode("overwrite").format("delta").saveAsTable("f1_silver.circuits")
 
 # COMMAND ----------
@@ -89,3 +89,10 @@ else:
 # COMMAND ----------
 
 dbutils.notebook.exit("Sucess")
+
+# COMMAND ----------
+
+# if spark.catalog.tableExists("f1_silver.circuits"):
+#     print("upsert")
+# else:
+#     print("new")

@@ -36,9 +36,9 @@ def overwrite_partition(df_input, db_name, table_name, partition_column):
 
 # COMMAND ----------
 
-def upsert(df_target,df_landing):
+def upsert(df_target, targetKey,df_landing, landingKey):
     (df_target.alias("target")
-     .merge(df_landing.alias("updates"), "(target.SkAcordo = updates.SkAcordo) and (target.data_source <> updates.data_source)")
+     .merge(df_landing.alias("updates"), "(target."+targetKey+"= updates."+landingKey+") and (target.file_date <> updates.file_date)")
      .whenMatchedUpdateAll()
      .whenNotMatchedInsertAll()
      .execute()
