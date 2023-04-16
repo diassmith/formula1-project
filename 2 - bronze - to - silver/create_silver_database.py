@@ -10,5 +10,5 @@
 
 # COMMAND ----------
 
-# %sql
-# DROP SCHEMA IF EXISTS f1_silver CASCADE
+# MAGIC %sql
+# MAGIC DROP SCHEMA IF EXISTS f1_silver CASCADE

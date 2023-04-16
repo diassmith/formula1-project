@@ -26,7 +26,7 @@ from pyspark.sql.functions import col, lit
 # COMMAND ----------
 
 # DBTITLE 1,Reading the file
-df_circuits = spark.read.parquet(f"{bronze_folder_path}/circuits")
+df_circuits = spark.table("f1_bronze.circuits")
 
 # COMMAND ----------
 
@@ -35,7 +35,7 @@ df_circuits.printSchema()
 # COMMAND ----------
 
 # DBTITLE 1,Selected the columns
-df_circuits_selected = df_circuits.select(col("circuitId"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt"))
+df_circuits_selected = df_circuits.select(col("circuitId"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt"), col("data_source"))
 
 # COMMAND ----------
 
@@ -70,7 +70,21 @@ display(df_circuits_selected)
 
 # COMMAND ----------
 
-df_circuits_selected.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.circuits")
+from delta.tables import *
+
+df_target = DeltaTable.forPath(spark, 'f1_silver.circuits')
+
+# COMMAND ----------
+
+if spark.catalog.tableExists("f1_silver.circuits"):
+    upsert()
+    
+else:
+    df_circuits_selected.write.mode("overwrite").format("delta").saveAsTable("f1_silver.circuits")
+
+# COMMAND ----------
+
+# df_circuits_selected.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.circuits")
 
 # COMMAND ----------
 
