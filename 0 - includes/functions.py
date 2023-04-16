@@ -33,3 +33,13 @@ def overwrite_partition(df_input, db_name, table_name, partition_column):
         df_output.write.mode("overwrite").partitionBy(partition_column).format(
             "parquet"
         ).saveAsTable(f"{db_name}.{table_name}")
+
+# COMMAND ----------
+
+def upsert(df_target,df_landing):
+    (df_target.alias("target")
+     .merge(df_landing.alias("updates"), "(target.SkAcordo = updates.SkAcordo) and (target.data_source <> updates.data_source)")
+     .whenMatchedUpdateAll()
+     .whenNotMatchedInsertAll()
+     .execute()
+    )
