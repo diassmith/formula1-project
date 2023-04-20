@@ -4,6 +4,10 @@
 
 # COMMAND ----------
 
+from delta.tables import *
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../0 - includes/configuration"
 
@@ -19,7 +23,9 @@
 # .schema(constructors_schema)\
 # .json(f"{landing_folder_path}/constructors.json")
 
-df_constructors = spark.read.parquet(f"{bronze_folder_path}/constructors")
+#df_constructors = spark.read.parquet(f"{bronze_folder_path}/constructors")
+
+df_constructors = spark.table("f1_bronze.constructors")
 
 # COMMAND ----------
 
@@ -61,8 +67,36 @@ display(df_constructors)
 
 # COMMAND ----------
 
-df_constructors.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.constructors")
+# df_constructors.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.constructors")
+
+# COMMAND ----------
+
+# %sql
+
+# DROP TABLE f1_silver.constructors
+
+# COMMAND ----------
+
+if spark.catalog.tableExists("f1_silver.constructors"):
+    df_target = DeltaTable.forPath(spark, "/mnt/adlsformula1/silver/constructors")
+    print("upsert")
+    upsert(df_target,"constructor_Id",df_constructors,"constructor_Id")
+else:
+    print("New")
+    df_constructors.write.mode("overwrite").format("delta").saveAsTable("f1_silver.constructors")
 
 # COMMAND ----------
 
 dbutils.notebook.exit("Sucess")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC 
+# MAGIC SELECT * FROM f1_silver.constructors
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC 
+# MAGIC SELECT * FROM f1_silver.constructors
