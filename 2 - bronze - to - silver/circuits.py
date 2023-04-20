@@ -75,7 +75,7 @@ display(df_circuits_selected)
 # COMMAND ----------
 
 if spark.catalog.tableExists("f1_silver.circuits"):
-    df_target = DeltaTable.forPath(spark, 'f1_silver.circuits')
+    df_target = DeltaTable.forPath(spark, '/mnt/adlsformula1/silver/circuits')
     print("upsert")
     upsert(df_target,circuit_id,df_circuits_selected,circuit_id)
 else:
@@ -89,10 +89,3 @@ else:
 # COMMAND ----------
 
 dbutils.notebook.exit("Sucess")
-
-# COMMAND ----------
-
-# if spark.catalog.tableExists("f1_silver.circuits"):
-#     print("upsert")
-# else:
-#     print("new")
