@@ -74,7 +74,7 @@ display(df_lap_times)
 # COMMAND ----------
 
 if spark.catalog.tableExists("f1_bronze.lap_times"):
-    df_target = DeltaTable.forPath(spark, "/mnt/adlsformula1/bronze/lap_times")
+    df_target = DeltaTable.forPath(spark, f"{bronze_folder_path}"+"/lap_times")
     print("upsert")
     upsert2(df_target,"raceId","driverId",df_lap_times,"raceId","driverId")
 else:

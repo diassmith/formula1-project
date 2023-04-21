@@ -63,7 +63,7 @@ display(df_pit_stops)
 # COMMAND ----------
 
 if spark.catalog.tableExists("f1_silver.pit_stops"):
-    df_target = DeltaTable.forPath(spark, f"{silver_folder_path}"+'/pit_stops')
+    df_target = DeltaTable.forPath(spark, f"{silver_folder_path}"+"/pit_stops")
     print("upsert")
     upsert2(df_target,"driverId","driver_id",df_pit_stops,"driverId","driver_id")
 else:

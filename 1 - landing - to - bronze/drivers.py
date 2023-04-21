@@ -87,7 +87,7 @@ display(df_drivers)
 # COMMAND ----------
 
 if spark.catalog.tableExists("f1_bronze.drivers"):
-    df_target = DeltaTable.forPath(spark, "/mnt/adlsformula1/bronze/drivers")
+    df_target = DeltaTable.forPath(spark, f"{bronze_folder_path}"+"/drivers")
     print("upsert")
     upsert(df_target,"driverid",df_drivers,"driverid")
 else:
