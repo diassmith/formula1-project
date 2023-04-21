@@ -85,9 +85,19 @@ display(df_results)
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC --DROP TABLE f1_bronze.results
-# MAGIC --REFRESH TABLE f1_bronze.results
+if spark.catalog.tableExists("f1_bronze.results"):
+    df_target = DeltaTable.forPath(spark, "/mnt/adlsformula1/bronze/results")
+    print("upsert")
+    upsert(df_target,"resultId",df_results,"resultId")
+else:
+    print("New")
+    df_results.write.mode("overwrite").format("delta").saveAsTable("f1_bronze.results")
+
+# COMMAND ----------
+
+# %sql
+# --DROP TABLE f1_bronze.results
+# --REFRESH TABLE f1_bronze.results
 
 # COMMAND ----------
 
@@ -102,7 +112,7 @@ display(df_results)
 
 # COMMAND ----------
 
-df_results = re_arrange_partition_column(df_results, 'raceId')
+# df_results = re_arrange_partition_column(df_results, 'raceId')
 
 # COMMAND ----------
 
@@ -118,7 +128,7 @@ df_results = re_arrange_partition_column(df_results, 'raceId')
 
 # COMMAND ----------
 
-overwrite_partition(df_results, 'f1_bronze', 'results','raceId')
+# overwrite_partition(df_results, 'f1_bronze', 'results','raceId')
 
 # COMMAND ----------
 
@@ -143,42 +153,22 @@ dbutils.notebook.exit("Sucess")
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC SELECT COUNT(1)
-# MAGIC   FROM f1_bronze.results;
+# %sql
+# SELECT COUNT(1)
+#   FROM f1_bronze.results;
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC SELECT raceid,  COUNT(1) 
-# MAGIC FROM f1_bronze.results
-# MAGIC GROUP BY raceid
+# %sql
+# SELECT raceid,  COUNT(1) 
+# FROM f1_bronze.results
+# GROUP BY raceid
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC SELECT raceid, driverid, COUNT(1) 
-# MAGIC FROM f1_bronze.results
-# MAGIC GROUP BY raceid, driverid
-# MAGIC HAVING COUNT(1) > 1
-# MAGIC --ORDER BY raceid, driverid DESC;
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC SELECT raceid, COUNT(1) 
-# MAGIC FROM f1_bronze.results
-# MAGIC GROUP BY raceid
-# MAGIC HAVING COUNT(1) > 1
-# MAGIC ORDER BY raceid DESC;
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC SELECT *
-# MAGIC FROM f1_bronze.results
-# MAGIC WHERE raceid = 1053
-
-# COMMAND ----------
-
-df_results.schema.names
+# %sql
+# SELECT raceid, driverid, COUNT(1) 
+# FROM f1_bronze.results
+# GROUP BY raceid, driverid
+# HAVING COUNT(1) > 1
+# --ORDER BY raceid, driverid DESC;
