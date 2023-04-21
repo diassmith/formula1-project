@@ -4,6 +4,10 @@
 
 # COMMAND ----------
 
+from delta.tables import *
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../0 - includes/configuration"
 
@@ -48,7 +52,17 @@ df_qualifying = add_date_load_silver(df_qualifying)
 
 # COMMAND ----------
 
-df_qualifying.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.qualifying")
+# df_qualifying.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.qualifying")
+
+# COMMAND ----------
+
+if spark.catalog.tableExists("f1_silver.qualifying"):
+    df_target = DeltaTable.forPath(spark, '/mnt/adlsformula1/silver/qualifying')
+    print("upsert")
+    upsert(df_target,"qualify_id",df_qualifying,"qualify_id")
+else:
+    print("New")
+    df_qualifying.write.mode("overwrite").format("delta").saveAsTable("f1_silver.qualifying")
 
 # COMMAND ----------
 
