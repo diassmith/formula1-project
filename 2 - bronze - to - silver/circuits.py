@@ -89,3 +89,8 @@ else:
 # COMMAND ----------
 
 dbutils.notebook.exit("Sucess")
+
+# COMMAND ----------
+
+# %sql
+# SELECT * FROM f1_silver.circuits
