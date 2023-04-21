@@ -64,7 +64,17 @@ display(df_races_selected)
 
 # COMMAND ----------
 
-df_races_selected.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.races")
+# df_races_selected.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.races")
+
+# COMMAND ----------
+
+if spark.catalog.tableExists("f1_silver.races"):
+    df_target = DeltaTable.forPath(spark, '/mnt/adlsformula1/silver/races')
+    print("upsert")
+    upsert(df_target,"race_id",df_races,"race_id")
+else:
+    print("New")
+    df_races.write.mode("overwrite").format("delta").saveAsTable("f1_silver.races")
 
 # COMMAND ----------
 
