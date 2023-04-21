@@ -73,4 +73,14 @@ df_results.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.resu
 
 # COMMAND ----------
 
+if spark.catalog.tableExists("f1_silver.results"):
+    df_target = DeltaTable.forPath(spark, '/mnt/adlsformula1/silver/results')
+    print("upsert")
+    upsert(df_target,"result_id",df_results,"result_id")
+else:
+    print("New")
+    df_results.write.mode("overwrite").format("delta").saveAsTable("f1_silver.results")
+
+# COMMAND ----------
+
 dbutils.notebook.exit("Sucess")
