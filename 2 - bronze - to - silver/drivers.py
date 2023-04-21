@@ -4,6 +4,10 @@
 
 # COMMAND ----------
 
+from delta.tables import *
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../0 - includes/configuration"
 
@@ -62,7 +66,17 @@ display(df_drivers)
 
 # COMMAND ----------
 
-df_drivers.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.drivers")
+# df_drivers.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.drivers")
+
+# COMMAND ----------
+
+if spark.catalog.tableExists("f1_silver.drivers"):
+    df_target = DeltaTable.forPath(spark, '/mnt/adlsformula1/silver/drivers')
+    print("upsert")
+    upsert(df_target,"driver_id",df_drivers,"driver_id")
+else:
+    print("New")
+    df_drivers.write.mode("overwrite").format("delta").saveAsTable("f1_silver.drivers")
 
 # COMMAND ----------
 
