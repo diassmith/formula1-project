@@ -7,8 +7,8 @@ def add_date_load_bronze(input_df):
 # COMMAND ----------
 
 from pyspark.sql.functions import current_timestamp
-def add_date_load_silver(input_df):
-  df_output = input_df.withColumn("date_load_silver", current_timestamp())
+def add_date_load_gold(input_df):
+  df_output = input_df.withColumn("date_load_gold", current_timestamp())
   return df_output
 
 # COMMAND ----------

@@ -62,6 +62,10 @@ df_circuits = (spark.read
 
 # COMMAND ----------
 
+df_circuits.columns
+
+# COMMAND ----------
+
 df_circuits.printSchema()
 
 # COMMAND ----------
