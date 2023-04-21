@@ -43,3 +43,13 @@ def upsert(df_target, targetKey,df_landing, landingKey):
      .whenNotMatchedInsertAll()
      .execute()
     )
+
+# COMMAND ----------
+
+def upsert2(df_target, targetKey,targetKey2,df_landing, landingKey,landingKey2):
+    (df_target.alias("target")
+     .merge(df_landing.alias("updates"), "(target."+targetKey+"= updates."+landingKey+") and (target."+targetKey2+"= updates."+landingKey2+")  and (target.file_date <> updates.file_date)")
+     .whenMatchedUpdateAll()
+     .whenNotMatchedInsertAll()
+     .execute()
+    )

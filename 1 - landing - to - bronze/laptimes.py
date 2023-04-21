@@ -76,7 +76,7 @@ display(df_lap_times)
 if spark.catalog.tableExists("f1_bronze.lap_times"):
     df_target = DeltaTable.forPath(spark, "/mnt/adlsformula1/bronze/lap_times")
     print("upsert")
-    upsert(df_target,"id",df_lap_times,"id")
+    upsert2(df_target,"raceId","driverId",df_lap_times,"raceId","driverId")
 else:
     print("New")
     df_lap_times.write.mode("overwrite").format("delta").saveAsTable("f1_bronze.lap_times")
