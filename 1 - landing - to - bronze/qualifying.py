@@ -4,6 +4,10 @@
 
 # COMMAND ----------
 
+from delta.tables import *
+
+# COMMAND ----------
+
 # DBTITLE 1,Creating parameters
 dbutils.widgets.text("p_data_source", "")
 v_data_source = dbutils.widgets.get("p_data_source")
@@ -65,7 +69,17 @@ df_qualifying = (add_date_load_bronze(df_qualifying)
 
 # COMMAND ----------
 
-df_qualifying.write.mode("overwrite").format("parquet").saveAsTable("f1_bronze.qualifying")
+# df_qualifying.write.mode("overwrite").format("parquet").saveAsTable("f1_bronze.qualifying")
+
+# COMMAND ----------
+
+if spark.catalog.tableExists("f1_bronze.qualifying"):
+    df_target = DeltaTable.forPath(spark, "/mnt/adlsformula1/bronze/qualifying")
+    print("upsert")
+    upsert(df_target,"id",df_qualifying,"id")
+else:
+    print("New")
+    df_qualifying.write.mode("overwrite").format("delta").saveAsTable("f1_bronze.qualifying")
 
 # COMMAND ----------
 
