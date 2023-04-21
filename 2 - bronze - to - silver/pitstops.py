@@ -4,6 +4,10 @@
 
 # COMMAND ----------
 
+from delta.tables import *
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../0 - includes/configuration"
 
@@ -54,7 +58,17 @@ display(df_pit_stops)
 
 # COMMAND ----------
 
-df_pit_stops.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.pit_stops")
+# df_pit_stops.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.pit_stops")
+
+# COMMAND ----------
+
+if spark.catalog.tableExists("f1_silver.pit_stops"):
+    df_target = DeltaTable.forPath(spark, '/mnt/adlsformula1/silver/pit_stops')
+    print("upsert")
+    upsert(df_target,"id",df_pit_stops,"id")
+else:
+    print("New")
+    df_pit_stops.write.mode("overwrite").format("delta").saveAsTable("f1_silver.pit_stops")
 
 # COMMAND ----------
 
