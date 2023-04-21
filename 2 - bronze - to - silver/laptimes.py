@@ -4,6 +4,10 @@
 
 # COMMAND ----------
 
+from delta.tables import *
+
+# COMMAND ----------
+
 # DBTITLE 1,Run the configuration notebook
 # MAGIC %run "../0 - includes/configuration"
 
@@ -49,7 +53,17 @@ display(df_lap_times)
 
 # COMMAND ----------
 
-df_lap_times.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.lap_times")
+# df_lap_times.write.mode("overwrite").format("parquet").saveAsTable("f1_silver.lap_times")
+
+# COMMAND ----------
+
+if spark.catalog.tableExists("f1_silver.lap_times"):
+    df_target = DeltaTable.forPath(spark, '/mnt/adlsformula1/silver/lap_times')
+    print("upsert")
+    upsert(df_target,"id",df_lap_times,"id")
+else:
+    print("New")
+    df_lap_times.write.mode("overwrite").format("delta").saveAsTable("f1_silver.lap_times")
 
 # COMMAND ----------
 
