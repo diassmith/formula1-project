@@ -78,7 +78,7 @@ display(df_constructors)
 # COMMAND ----------
 
 if spark.catalog.tableExists("f1_silver.constructors"):
-    df_target = DeltaTable.forPath(spark, "/mnt/adlsformula1/silver/constructors")
+    df_target = DeltaTable.forPath(spark, f"{silver_folder_path}"+"/constructors")
     print("upsert")
     upsert(df_target,"constructor_Id",df_constructors,"constructor_Id")
 else:
