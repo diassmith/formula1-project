@@ -4,6 +4,10 @@
 
 # COMMAND ----------
 
+from delta.tables import *
+
+# COMMAND ----------
+
 # DBTITLE 1,Creating parameters
 dbutils.widgets.text("p_data_source", "")
 v_data_source = dbutils.widgets.get("p_data_source")
@@ -71,7 +75,17 @@ display(df_pit_stops)
 
 # COMMAND ----------
 
-df_pit_stops.write.mode("overwrite").format("parquet").saveAsTable("f1_bronze.pit_stops")
+# df_pit_stops.write.mode("overwrite").format("parquet").saveAsTable("f1_bronze.pit_stops")
+
+# COMMAND ----------
+
+if spark.catalog.tableExists("f1_bronze.pit_stops"):
+    df_target = DeltaTable.forPath(spark, "/mnt/adlsformula1/bronze/pit_stops")
+    print("upsert")
+    upsert(df_target,"id",df_pit_stops,"id")
+else:
+    print("New")
+    df_pit_stops.write.mode("overwrite").format("delta").saveAsTable("f1_bronze.pit_stops")
 
 # COMMAND ----------
 
