@@ -26,7 +26,7 @@ def mount_adls(container_name):
 # COMMAND ----------
 
 # DBTITLE 1,call the function to create mount
-# mount_adls("landing")
+#mount_adls("landing")
 # mount_adls("bronze")
 # mount_adls("silver")
 # mount_adls("gold")
