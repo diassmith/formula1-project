@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ### Working with circuits.csv file
+# MAGIC ### Working Circuits Bronze Layer
 
 # COMMAND ----------
 
