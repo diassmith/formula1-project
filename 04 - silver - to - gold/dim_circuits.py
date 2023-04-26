@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ### Working with circuits.csv file
+# MAGIC ### Creating Dimension Circuit
 
 # COMMAND ----------
 
@@ -44,17 +44,16 @@ display(df_circuits)
 
 # DBTITLE 1,Renaming the columns
 df_circuits = (df_circuits.withColumnRenamed("circuit_id", "IdCircuit")
-                                            .withColumnRenamed("circuit_ref", "Reference")
-                                            .withColumnRenamed("name", "Name")
+                                            .withColumnRenamed("circuit_ref", "CircuitReference")
+                                            .withColumnRenamed("name", "CircuitName")
                                             .withColumnRenamed("location", "Location")
                                             .withColumnRenamed("country", "Country")
                                             .withColumnRenamed("latitude", "Latitude")
-                                            .withColumnRenamed("longitude", "Longitude")
-                                            .withColumnRenamed("altitude", "Altitude"))
+                                            .withColumnRenamed("longitude", "Longitude"))
 
 # COMMAND ----------
 
-df_circuits = df_circuits.drop(df_circuits.file_date).drop(df_circuits.date_load_silver)
+df_circuits = df_circuits.drop('date_load_bronze').drop('date_load_silver')
 
 # COMMAND ----------
 
@@ -62,7 +61,11 @@ df_circuits = df_circuits.drop(df_circuits.file_date).drop(df_circuits.date_load
 
 # COMMAND ----------
 
-# DBTITLE 1,Write dim Circuits
+display(df_circuits)
+
+# COMMAND ----------
+
+# DBTITLE 1,Create dim_Circuits
 if spark.catalog.tableExists("f1_gold.dim_Circuits"):
     df_target = DeltaTable.forPath(spark, f"{gold_folder_path}"+"/dim_Circuits")
     print("upsert")

@@ -1,22 +1,50 @@
 # Databricks notebook source
-from pyspark.sql.functions import current_timestamp
+from pyspark.sql.functions import current_timestamp, from_utc_timestamp
+from pytz import timezone
+
+# COMMAND ----------
+
 def add_date_load_landing(input_df):
-  df_output = input_df.withColumn("date_ref", current_timestamp())
-  return df_output
+    sao_paulo_tz = timezone('America/Sao_Paulo')
+    current_time = current_timestamp()
+    current_time_sp = from_utc_timestamp(current_time, sao_paulo_tz.zone)
+    df_output = input_df.withColumn("date_ref", current_time_sp)
+    return df_output
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
+# from pyspark.sql.functions import current_timestamp
+# def add_date_load_landing(input_df):
+#   df_output = input_df.withColumn("date_ref", current_timestamp())
+#   return df_output
+
+# COMMAND ----------
+
 def add_date_load_bronze(input_df):
-  df_output = input_df.withColumn("date_load_bronze", current_timestamp())
-  return df_output
+    sao_paulo_tz = timezone('America/Sao_Paulo')
+    current_time = current_timestamp()
+    current_time_sp = from_utc_timestamp(current_time, sao_paulo_tz.zone)
+    df_output = input_df.withColumn("date_load_bronze", current_time_sp)
+    return df_output
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
+
+def add_date_load_silver(input_df):
+    sao_paulo_tz = timezone('America/Sao_Paulo')
+    current_time = current_timestamp()
+    current_time_sp = from_utc_timestamp(current_time, sao_paulo_tz.zone)
+    df_output = input_df.withColumn("date_load_silver", current_time_sp)
+    return df_output
+
+# COMMAND ----------
+
 def add_date_load_gold(input_df):
-  df_output = input_df.withColumn("date_load_gold", current_timestamp())
-  return df_output
+    sao_paulo_tz = timezone('America/Sao_Paulo')
+    current_time = current_timestamp()
+    current_time_sp = from_utc_timestamp(current_time, sao_paulo_tz.zone)
+    df_output = input_df.withColumn("date_load_gold", current_time_sp)
+    return df_output
 
 # COMMAND ----------
 

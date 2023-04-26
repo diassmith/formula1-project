@@ -15,17 +15,17 @@ import pytz
 
 # COMMAND ----------
 
-# Get date in UTC
-date_time_utc = datetime.utcnow()
+# # Get date in UTC
+# date_time_utc = datetime.utcnow()
 
-# define the local time
-fuso_horario_local = pytz.timezone('America/Sao_Paulo')
+# # define the local time
+# fuso_horario_local = pytz.timezone('America/Sao_Paulo')
 
-# fix the date with local datetime
-date_time_local = date_time_utc.replace(tzinfo=pytz.utc).astimezone(fuso_horario_local)
+# # fix the date with local datetime
+# date_time_local = date_time_utc.replace(tzinfo=pytz.utc).astimezone(fuso_horario_local)
 
-# get the date from datetime
-actual_date = date_time_local.date()
+# # get the date from datetime
+# actual_date = date_time_local.date()
 
 # COMMAND ----------
 
@@ -50,11 +50,15 @@ df_circuits = (add_date_load_landing(df_circuits))
 
 # COMMAND ----------
 
-display(df_circuits)
+# display(df_circuits)
 
 # COMMAND ----------
 
 df_circuits = df_circuits.orderBy(asc("locality")).withColumn("SkCircuits",monotonically_increasing_id()+1)
+
+# COMMAND ----------
+
+# display(df_circuits)
 
 # COMMAND ----------
 
