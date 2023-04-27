@@ -48,7 +48,7 @@ import pyspark.sql.functions as F
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DateType
 
 base_url = 'https://ergast.com/api/f1/'
-end_year = 1964
+end_year = 1965
 
 # Define o esquema com as colunas desejadas
 schema = StructType([
@@ -81,6 +81,25 @@ for year in range(1960, end_year+1):
 
     # Adiciona uma coluna com o ano correspondente
     df_drivers_year = df_drivers_year.withColumn('year', F.lit(year))
+
+   # df_drivers_year = df_drivers_year.select('code','dateOfBirth','driverId','familyName','nationality','permanentNumber','url','year')
+    # # Verifica se a coluna "code" existe no DataFrame
+    # if "code" in df_drivers_year.columns:
+    #     # Se existir, mantém a coluna "code"
+    #     df_drivers_year = df_drivers_year.withColumn('code', F.col('code'))
+    # else:
+    #     # Se não existir, adiciona a coluna "code" com valor nulo
+    #     df_drivers_year = df_drivers_year.withColumn('code', F.lit(None).cast(StringType()))
+
+    if 'code' not in df_drivers_year.columns:
+        df_drivers_year = df_drivers_year.withColumn('code', F.lit(None))
+    elif 'givenName' not in df_drivers_year.columns:
+        df_drivers_year = df_drivers_year.withColumn('givenName', F.lit(None))
+    elif 'permanentNumber' not in df_drivers_year.columns:
+        df_drivers_year = df_drivers_year.withColumn('permanentNumber', F.lit(None))
+
+    df_drivers_year = df_drivers_year.select('code','dateOfBirth','driverId','familyName','nationality','permanentNumber','url','year')
+
 
     if df_drivers.isEmpty():
         df_drivers = df_drivers_year
