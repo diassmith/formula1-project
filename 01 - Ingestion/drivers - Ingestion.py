@@ -1,56 +1,27 @@
 # Databricks notebook source
 import requests
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import from_json, col
+from pyspark.sql.functions import from_json, col, asc,desc, monotonically_increasing_id, concat, lit, max, min, row_number
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType, DateType
-
-# COMMAND ----------
-
-response = requests.get('http://ergast.com/api/f1/1964/drivers.json')
-json_data = response.json()
-
-df_drivers = spark.createDataFrame(json_data['MRData']['DriverTable']['Drivers'])
-
-
-# COMMAND ----------
-
-display(df_drivers)
-
-# COMMAND ----------
-
-# Define o esquema com as colunas desejadas
-schema = StructType([
-    StructField('code', StringType(), True),
-    StructField('dateOfBirth', StringType(), True),
-    StructField('driverId', StringType(), True),
-    StructField('familyName', StringType(), True),
-    StructField('givenName', StringType(), True),
-    StructField('nationality', StringType(), True),
-    StructField('permanentNumber', StringType(), True),
-    StructField('url', StringType(), True),
-    StructField('year', IntegerType(), True)
-])
-
-# Cria um DataFrame vazio com o esquema definido
-df_drivers = spark.createDataFrame([], schema)
-
-# COMMAND ----------
-
-if df_drivers.isEmpty():
-    print("O dataframe está vazio")
-else:
-    print("O dataframe contém registros")
-
-# COMMAND ----------
-
-import requests
+from pyspark.sql.window import Window
 import pyspark.sql.functions as F
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DateType
+
+# COMMAND ----------
+
+# MAGIC %run "../0 - includes/configuration"
+
+# COMMAND ----------
+
+# MAGIC %run "../0 - includes/functions"
+
+# COMMAND ----------
 
 base_url = 'https://ergast.com/api/f1/'
-end_year = 1965
+end_year = 2023
 
-# Define o esquema com as colunas desejadas
+# COMMAND ----------
+
+# Define dataframe schenma
 schema = StructType([
     StructField('code', StringType(), True),
     StructField('dateOfBirth', StringType(), True),
@@ -63,57 +34,58 @@ schema = StructType([
     StructField('year', IntegerType(), True)
 ])
 
-# Cria um DataFrame vazio com o esquema definido
+# Create dataframe that it'll receive the data
 df_drivers = spark.createDataFrame([], schema)
 
-# Itera sobre um range de anos desde o início da F1 até o ano de interesse
-for year in range(1960, end_year+1):
+# COMMAND ----------
 
-    # Faz a consulta para obter todos os drivers para o ano especificado
+
+
+# COMMAND ----------
+
+# Creating a loop to do request data of each year since of the first ride
+for year in range(1950, end_year+1):
+
+    # Doing the consult to get all drivers
     response = requests.get(base_url + str(year) + '/drivers.json')
     json_data = response.json()
 
-    # Obtém a lista de drivers a partir do JSON
+    # Getting the drivers list from JSON
     drivers_list = json_data['MRData']['DriverTable']['Drivers']
 
-    # Converte a lista de drivers em um DataFrame do PySpark
+    # Convert the list to Dataframe Pyspark
     df_drivers_year = spark.createDataFrame(drivers_list)
 
-    # Adiciona uma coluna com o ano correspondente
+    # Creating a new column to storage the year from request
     df_drivers_year = df_drivers_year.withColumn('year', F.lit(year))
 
-   # df_drivers_year = df_drivers_year.select('code','dateOfBirth','driverId','familyName','nationality','permanentNumber','url','year')
-    # # Verifica se a coluna "code" existe no DataFrame
-    # if "code" in df_drivers_year.columns:
-    #     # Se existir, mantém a coluna "code"
-    #     df_drivers_year = df_drivers_year.withColumn('code', F.col('code'))
-    # else:
-    #     # Se não existir, adiciona a coluna "code" com valor nulo
-    #     df_drivers_year = df_drivers_year.withColumn('code', F.lit(None).cast(StringType()))
-
+    #In some years of the Formul1, we haven't the data so, to be able to do this project, I created a condition that check if the column exists in dataframe from that specific year.
+    #if the column exist, I'll insert the values else I'll set this as null
+    #I've understood the main columns that some year doesn't exists is code, givenName and permanentNumber
     if 'code' not in df_drivers_year.columns:
         df_drivers_year = df_drivers_year.withColumn('code', F.lit(None))
-    elif 'givenName' not in df_drivers_year.columns:
+    if 'givenName' not in df_drivers_year.columns:
         df_drivers_year = df_drivers_year.withColumn('givenName', F.lit(None))
-    elif 'permanentNumber' not in df_drivers_year.columns:
+    if 'permanentNumber' not in df_drivers_year.columns:
         df_drivers_year = df_drivers_year.withColumn('permanentNumber', F.lit(None))
 
-    df_drivers_year = df_drivers_year.select('code','dateOfBirth','driverId','familyName','nationality','permanentNumber','url','year')
 
+    df_drivers_year = df_drivers_year.select('code','dateOfBirth','driverId','familyName','givenName','nationality','permanentNumber','url','year')
 
     if df_drivers.isEmpty():
         df_drivers = df_drivers_year
     else:
         df_drivers = df_drivers.union(df_drivers_year)
 
-    # Adiciona o DataFrame do ano à lista de DataFrames
-    #df_drivers = df_drivers.union(df_drivers_year)
-
-# Exibe o DataFrame resultante
-display(df_drivers)
-#df_drivers_year.show()
-
 
 # COMMAND ----------
 
-display(df_drivers)
+df_drivers = df_drivers.orderBy(asc("driverId")).withColumn("SkDrivers",monotonically_increasing_id()+1)
+
+# COMMAND ----------
+
+df_drivers = add_date_load_landing(df_drivers)
+
+# COMMAND ----------
+
+df_drivers.write.mode("overwrite").parquet(f"{landing_folder_path}/drivers")
