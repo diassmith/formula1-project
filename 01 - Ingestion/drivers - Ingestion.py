@@ -39,10 +39,6 @@ df_drivers = spark.createDataFrame([], schema)
 
 # COMMAND ----------
 
-
-
-# COMMAND ----------
-
 # Creating a loop to do request data of each year since of the first ride
 for year in range(1950, end_year+1):
 
@@ -85,6 +81,10 @@ df_drivers = df_drivers.orderBy(asc("driverId")).withColumn("SkDrivers",monotoni
 # COMMAND ----------
 
 df_drivers = add_date_load_landing(df_drivers)
+
+# COMMAND ----------
+
+# display(df_drivers.filter("familyName = 'Hamilton'"))
 
 # COMMAND ----------
 
