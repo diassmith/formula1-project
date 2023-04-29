@@ -71,11 +71,11 @@ df_drivers = df_drivers.drop('date_load_bronze').drop('date_load_silver')
 
 # COMMAND ----------
 
-display(df_drivers.filter("Surname = 'Hamilton'"))
+# display(df_drivers.filter("Surname = 'Hamilton'"))
 
 # COMMAND ----------
 
-# DBTITLE 1,Create dim_Circuits
+# DBTITLE 1,Create dim_Drivers
 if spark.catalog.tableExists("f1_gold.dim_Drivers"):
     df_target = DeltaTable.forPath(spark, f"{gold_folder_path}"+"/dim_Drivers")
     print("upsert")
