@@ -1,7 +1,7 @@
 # Databricks notebook source
 import requests
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import from_json, col, asc,desc, monotonically_increasing_id, concat, lit, max, min, row_number
+from pyspark.sql.functions import from_json, col, asc,desc, monotonically_increasing_id, concat, lit, max, min, row_number, hash, abs,dayofyear
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType, DateType
 from pyspark.sql.window import Window
 import pyspark.sql.functions as F
@@ -23,6 +23,7 @@ end_year = 2023
 
 # Define dataframe schenma
 schema = StructType([
+    StructField('id', IntegerType(), True),
     StructField('code', StringType(), True),
     StructField('dateOfBirth', StringType(), True),
     StructField('driverId', StringType(), True),
@@ -53,7 +54,9 @@ for year in range(1950, end_year+1):
     df_drivers_year = spark.createDataFrame(drivers_list)
 
     # Creating a new column to storage the year from request
-    df_drivers_year = df_drivers_year.withColumn('year', F.lit(year))
+    #Creating a new column id using hash
+    df_drivers_year = (df_drivers_year.withColumn('year', F.lit(year))
+                                      .withColumn('id', abs(hash(concat(dayofyear(df_drivers_year["dateOfBirth"]), df_drivers_year["driverId"])))))
 
     #In some years of the Formul1, we haven't the data so, to be able to do this project, I created a condition that check if the column exists in dataframe from that specific year.
     #if the column exist, I'll insert the values else I'll set this as null
@@ -66,7 +69,7 @@ for year in range(1950, end_year+1):
         df_drivers_year = df_drivers_year.withColumn('permanentNumber', F.lit(None))
 
 
-    df_drivers_year = df_drivers_year.select('code','dateOfBirth','driverId','familyName','givenName','nationality','permanentNumber','url','year')
+    df_drivers_year = df_drivers_year.select('id','code','dateOfBirth','driverId','familyName','givenName','nationality','permanentNumber','url','year')
 
     if df_drivers.isEmpty():
         df_drivers = df_drivers_year
@@ -76,15 +79,11 @@ for year in range(1950, end_year+1):
 
 # COMMAND ----------
 
-df_drivers = df_drivers.orderBy(asc("driverId")).withColumn("SkDrivers",monotonically_increasing_id()+1)
-
-# COMMAND ----------
-
 df_drivers = add_date_load_landing(df_drivers)
 
 # COMMAND ----------
 
-# display(df_drivers.filter("familyName = 'Hamilton'"))
+#  display(df_drivers.filter("familyName = 'Hamilton'"))
 
 # COMMAND ----------
 
