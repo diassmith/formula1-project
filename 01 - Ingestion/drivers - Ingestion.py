@@ -56,7 +56,7 @@ for year in range(1950, end_year+1):
     # Creating a new column to storage the year from request
     #Creating a new column id using hash
     df_drivers_year = (df_drivers_year.withColumn('year', F.lit(year))
-                                      .withColumn('id', abs(hash(concat(dayofyear(df_drivers_year["dateOfBirth"]), df_drivers_year["driverId"])))))
+                                      .withColumn('id', abs(hash(concat("driverId", df_drivers_year["driverId"])))))
 
     #In some years of the Formul1, we haven't the data so, to be able to do this project, I created a condition that check if the column exists in dataframe from that specific year.
     #if the column exist, I'll insert the values else I'll set this as null
