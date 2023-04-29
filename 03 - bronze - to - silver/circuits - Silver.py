@@ -55,7 +55,7 @@ display(df_circuits)
 if spark.catalog.tableExists("f1_silver.circuits"):
     df_target = DeltaTable.forPath(spark, f"{silver_folder_path}"+"/circuits")
     print("upsert")
-    upsert(df_target,circuit_id,df_circuits,circuit_id)
+    upsert(df_target,"id",df_circuits,"id")
 else:
     print("New")
     df_circuits.write.mode("overwrite").format("delta").saveAsTable("f1_silver.circuits")
