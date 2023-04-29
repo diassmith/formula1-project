@@ -50,6 +50,10 @@ df_circuits = df_circuits.select('locality','country',
 
 # COMMAND ----------
 
+display(df_circuits)
+
+# COMMAND ----------
+
 if spark.catalog.tableExists("f1_bronze.circuits"):
     df_target = DeltaTable.forPath(spark, f"{bronze_folder_path}"+"/circuits")
     print("upsert")
@@ -64,5 +68,5 @@ dbutils.notebook.exit("Sucess")
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC SELECT * FROM f1_bronze.circuits
+# %sql
+# SELECT * FROM f1_bronze.circuits
