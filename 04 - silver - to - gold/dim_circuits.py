@@ -38,14 +38,14 @@ df_circuits.printSchema()
 
 # COMMAND ----------
 
-display(df_circuits)
+# display(df_circuits)
 
 # COMMAND ----------
 
 # DBTITLE 1,Renaming the columns
-df_circuits = (df_circuits.withColumnRenamed("circuit_id", "IdCircuit")
+df_circuits = (df_circuits.withColumnRenamed("id", "CircuitId")
                                             .withColumnRenamed("circuit_ref", "CircuitReference")
-                                            .withColumnRenamed("name", "CircuitName")
+                                            .withColumnRenamed("circuit_name", "CircuitName")
                                             .withColumnRenamed("location", "Location")
                                             .withColumnRenamed("country", "Country")
                                             .withColumnRenamed("latitude", "Latitude")

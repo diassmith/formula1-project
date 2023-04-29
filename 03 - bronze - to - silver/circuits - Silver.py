@@ -37,10 +37,9 @@ df_circuits.printSchema()
 
 df_circuits = (df_circuits.withColumnRenamed("circuitId", "circuit_ref")
                           .withColumnRenamed("locality", "location")
-                          .withColumnRenamed("SkCircuits", "circuit_id")
                           .withColumnRenamed("lat","latitude")
                           .withColumnRenamed("long", "longitude")
-                          .withColumnRenamed("circuitName","circuit_name").select('circuit_id','circuit_ref','circuit_name','location','country','latitude','longitude','date_ref','date_load_bronze'))
+                          .withColumnRenamed("circuitName","circuit_name").select('id','circuit_ref','circuit_name','location','country','latitude','longitude','date_ref','date_load_bronze'))
 
 # COMMAND ----------
 
@@ -67,5 +66,5 @@ dbutils.notebook.exit("Sucess")
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC SELECT * FROM f1_silver.circuits
+# %sql
+# SELECT * FROM f1_silver.circuits

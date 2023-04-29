@@ -1,6 +1,6 @@
 # Databricks notebook source
 import requests
-from pyspark.sql.functions import from_json, col,asc,desc, monotonically_increasing_id
+from pyspark.sql.functions import from_json, col,asc,desc, monotonically_increasing_id, concat, lit, max, min, row_number, hash, abs,dayofyear
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType
 from datetime import date, datetime
 import pytz
@@ -54,7 +54,8 @@ df_circuits = (add_date_load_landing(df_circuits))
 
 # COMMAND ----------
 
-df_circuits = df_circuits.orderBy(asc("locality")).withColumn("SkCircuits",monotonically_increasing_id()+1)
+df_circuits = (df_circuits.orderBy(asc("locality"))
+                          .withColumn('id', abs(hash(concat("circuitId", df_circuits["circuitId"])))))
 
 # COMMAND ----------
 

@@ -46,14 +46,18 @@ df_circuits = (add_date_load_bronze(df_circuits))
 # COMMAND ----------
 
 df_circuits = df_circuits.select('locality','country',
-'lat','long','circuitId','circuitName','url','date_ref','date_load_bronze','SkCircuits')
+'lat','long','circuitId','circuitName','url','date_ref','date_load_bronze','id')
+
+# COMMAND ----------
+
+# display(df_circuits)
 
 # COMMAND ----------
 
 if spark.catalog.tableExists("f1_bronze.circuits"):
     df_target = DeltaTable.forPath(spark, f"{bronze_folder_path}"+"/circuits")
     print("upsert")
-    upsert(df_target,"SkCircuits",df_circuits,"SkCircuits")
+    upsert(df_target,"id",df_circuits,"id")
 else:
     print("New")
     df_circuits.write.mode("overwrite").format("delta").saveAsTable("f1_bronze.circuits")
@@ -64,5 +68,5 @@ dbutils.notebook.exit("Sucess")
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC SELECT * FROM f1_bronze.circuits
+# %sql
+# SELECT * FROM f1_bronze.circuits
