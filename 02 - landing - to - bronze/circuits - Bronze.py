@@ -50,7 +50,7 @@ df_circuits = df_circuits.select('locality','country',
 
 # COMMAND ----------
 
-display(df_circuits)
+# display(df_circuits)
 
 # COMMAND ----------
 

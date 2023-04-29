@@ -55,7 +55,7 @@ df_circuits = (add_date_load_landing(df_circuits))
 # COMMAND ----------
 
 df_circuits = (df_circuits.orderBy(asc("locality"))
-                          .withColumn('id', abs(hash(concat(df_circuits["country"], df_circuits["circuitId"])))))
+                          .withColumn('id', abs(hash(concat("circuitId", df_circuits["circuitId"])))))
 
 # COMMAND ----------
 
