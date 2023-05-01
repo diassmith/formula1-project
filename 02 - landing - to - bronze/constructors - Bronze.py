@@ -22,7 +22,7 @@ df_constructors = add_date_load_bronze(df_constructors)
 
 # COMMAND ----------
 
-df_constructors.display()
+# df_constructors.display()
 
 # COMMAND ----------
 

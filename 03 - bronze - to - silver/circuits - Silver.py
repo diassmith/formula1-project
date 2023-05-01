@@ -26,7 +26,7 @@ from delta.tables import *
 
 # COMMAND ----------
 
-# DBTITLE 1,Reading the file
+# DBTITLE 1,Reading table
 df_circuits = spark.table("f1_bronze.circuits")
 
 # COMMAND ----------

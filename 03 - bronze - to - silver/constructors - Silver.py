@@ -1,10 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ### Ingest constructors.json file
-
-# COMMAND ----------
-
-from delta.tables import *
+# MAGIC ### Constructors Silver
 
 # COMMAND ----------
 
@@ -19,22 +15,11 @@ from delta.tables import *
 # COMMAND ----------
 
 # DBTITLE 1,Reading file
-# df_constructors = spark.read\
-# .schema(constructors_schema)\
-# .json(f"{landing_folder_path}/constructors.json")
-
-#df_constructors = spark.read.parquet(f"{bronze_folder_path}/constructors")
-
 df_constructors = spark.table("f1_bronze.constructors")
 
 # COMMAND ----------
 
-display(df_constructors)
-
-# COMMAND ----------
-
-# DBTITLE 1,Importing Libraries and Functions
-from pyspark.sql.functions import col, lit
+display(df_constructors.select())
 
 # COMMAND ----------
 
@@ -92,11 +77,11 @@ dbutils.notebook.exit("Sucess")
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC 
+# MAGIC
 # MAGIC SELECT * FROM f1_silver.constructors
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC 
+# MAGIC
 # MAGIC SELECT * FROM f1_silver.constructors
