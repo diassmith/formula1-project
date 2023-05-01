@@ -29,7 +29,7 @@ df_circuits.printSchema()
 
 # DBTITLE 1,Renaming the columns
 df_circuits = (df_circuits.withColumnRenamed("id", "CircuitId")
-                                            .withColumnRenamed("circuit_ref", "CircuitReference")
+                                            .withColumnRenamed("circuitRef", "CircuitReference")
                                             .withColumnRenamed("circuit_name", "CircuitName")
                                             .withColumnRenamed("location", "Location")
                                             .withColumnRenamed("country", "Country")
