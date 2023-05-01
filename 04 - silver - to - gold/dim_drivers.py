@@ -4,15 +4,6 @@
 
 # COMMAND ----------
 
-# DBTITLE 1,Importing Library
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
-from pyspark.sql.functions import col, lit
-import pyspark.sql.functions as F
-from pyspark.sql.window import Window
-from delta.tables import *
-
-# COMMAND ----------
-
 # DBTITLE 1,Run the configuration notebook 
 # MAGIC %run "../0 - includes/configuration"
 
@@ -23,23 +14,18 @@ from delta.tables import *
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ##### Reading the CSV file using the spark dataframe reader
-
-# COMMAND ----------
-
 # DBTITLE 1,Reading the file
 df_drivers = spark.table("f1_silver.drivers")
 
 # COMMAND ----------
 
-df_drivers.printSchema()
+df_drivers = df_drivers.drop('date_load_bronze').drop('date_load_silver')
 
 # COMMAND ----------
 
 # DBTITLE 1,Renaming the columns
 df_drivers = (df_drivers.withColumnRenamed("id", "DriverId")
-                        .withColumnRenamed("driverRef", "Driver")
+                        .withColumnRenamed("driverRef", "DriverReference")
                         .withColumnRenamed("surname", "Surname")
                         .withColumnRenamed("forename", "Forename")
                         .withColumnRenamed("fullName", "FullName")
@@ -48,8 +34,8 @@ df_drivers = (df_drivers.withColumnRenamed("id", "DriverId")
 
 # COMMAND ----------
 
-# DBTITLE 1,Creating column FirstYear
-#This is column has been created to storage the year drivers first race
+# DBTITLE 1,Creating column FirstRace
+#This is column has been created to storage the year first race of Driver
 window = Window.partitionBy('DriverId')
 
 df_drivers = df_drivers.withColumn('FirstRace', F.min('year').over(window))
@@ -64,14 +50,6 @@ df_ranked = df_drivers.withColumn("row_number", F.row_number().over(window))
 df_drivers = df_ranked.filter(F.col("row_number") == 1)
 
 df_drivers = df_drivers.drop("row_number")
-
-# COMMAND ----------
-
-df_drivers = df_drivers.drop('date_load_bronze').drop('date_load_silver')
-
-# COMMAND ----------
-
-# display(df_drivers.filter("Surname = 'Hamilton'"))
 
 # COMMAND ----------
 

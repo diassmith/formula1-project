@@ -1,24 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ### Working drivers file
-
-# COMMAND ----------
-
-# DBTITLE 1,Importing Libraries and Functions
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DateType
-from pyspark.sql.functions import col, concat, lit
-from delta.tables import *
-
-# COMMAND ----------
-
-# DBTITLE 1,Creating parameters
-# dbutils.widgets.text("p_data_source", "")
-# v_data_source = dbutils.widgets.get("p_data_source")
-
-# COMMAND ----------
-
-# dbutils.widgets.text("p_file_date", "2021-03-21")
-# v_file_date = dbutils.widgets.get("p_file_date")
+# MAGIC ### Drivers Bronze
 
 # COMMAND ----------
 
@@ -48,6 +30,7 @@ display(df_drivers)
 
 # COMMAND ----------
 
+# DBTITLE 1,Creating Drivers Bronze Delta Table
 if spark.catalog.tableExists("f1_bronze.drivers"):
     df_target = DeltaTable.forPath(spark, f"{bronze_folder_path}"+"/drivers")
     print("upsert")
