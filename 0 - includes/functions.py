@@ -10,7 +10,6 @@ from datetime import date, datetime
 from delta.tables import *
 
 
-
 # COMMAND ----------
 
 from pyspark.sql.functions import current_timestamp, from_utc_timestamp

@@ -1,24 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ### Working Circuits Bronze Layer
-
-# COMMAND ----------
-
-# DBTITLE 1,Importing Library
-from delta.tables import *
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
-from pyspark.sql.functions import col, lit
-
-# COMMAND ----------
-
-# DBTITLE 1,Creating Parameters
-# dbutils.widgets.text("p_data_source", "")
-# v_data_source = dbutils.widgets.get("p_data_source")
-
-# COMMAND ----------
-
-# dbutils.widgets.text("p_file_date", "2021-03-21")
-# v_file_date = dbutils.widgets.get("p_file_date")
+# MAGIC ### Circuits Bronze
 
 # COMMAND ----------
 
@@ -40,20 +22,12 @@ df_circuits = (add_date_load_bronze(df_circuits))
 
 # COMMAND ----------
 
-# for column in df_circuits.columns:
-#     print("'"+column+"'"+",")
-
-# COMMAND ----------
-
 df_circuits = df_circuits.select('locality','country',
 'lat','long','circuitId','circuitName','url','id','date_ref','date_load_bronze')
 
 # COMMAND ----------
 
-# display(df_circuits)
-
-# COMMAND ----------
-
+# DBTITLE 1,Creating the Circuits bronze
 if spark.catalog.tableExists("f1_bronze.circuits"):
     df_target = DeltaTable.forPath(spark, f"{bronze_folder_path}"+"/circuits")
     print("upsert")
