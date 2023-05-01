@@ -4,10 +4,6 @@
 
 # COMMAND ----------
 
-from delta.tables import *
-
-# COMMAND ----------
-
 # DBTITLE 1,Run the configuration notebook 
 # MAGIC %run "../0 - includes/configuration"
 
@@ -15,17 +11,6 @@ from delta.tables import *
 
 # DBTITLE 1,Run the functions notebook 
 # MAGIC %run "../0 - includes/functions"
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ##### Reading the CSV file using the spark dataframe reader
-
-# COMMAND ----------
-
-# DBTITLE 1,Importing Library
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
-from pyspark.sql.functions import col, lit
 
 # COMMAND ----------
 
@@ -57,11 +42,7 @@ df_circuits = df_circuits.drop('date_load_bronze').drop('date_load_silver')
 
 # COMMAND ----------
 
-# df_circuits.show()
-
-# COMMAND ----------
-
-display(df_circuits)
+# display(df_circuits)
 
 # COMMAND ----------
 
