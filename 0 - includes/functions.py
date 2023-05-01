@@ -8,7 +8,7 @@ from pyspark.sql.window import Window
 import pyspark.sql.functions as F
 from datetime import date, datetime
 from delta.tables import *
-
+from pyspark.sql.window import Window
 
 # COMMAND ----------
 
