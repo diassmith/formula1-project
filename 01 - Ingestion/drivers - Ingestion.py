@@ -83,10 +83,6 @@ df_drivers = add_date_load_landing(df_drivers)
 
 # COMMAND ----------
 
-#  display(df_drivers.filter("familyName = 'Hamilton'"))
-
-# COMMAND ----------
-
 df_drivers.write.mode("overwrite").parquet(f"{landing_folder_path}/drivers")
 
 # COMMAND ----------
@@ -100,6 +96,3 @@ df_drivers.write.mode("overwrite").parquet(f"{landing_folder_path}/drivers")
 
 # drivers = json_data['MRData']['DriverTable']['Drivers']
 # df_drivers = spark.createDataFrame(drivers)
-
-
-
