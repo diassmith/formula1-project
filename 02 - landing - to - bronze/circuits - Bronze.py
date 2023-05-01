@@ -46,7 +46,7 @@ df_circuits = (add_date_load_bronze(df_circuits))
 # COMMAND ----------
 
 df_circuits = df_circuits.select('locality','country',
-'lat','long','circuitId','circuitName','url','date_ref','date_load_bronze','id')
+'lat','long','circuitId','circuitName','url','id','date_ref','date_load_bronze')
 
 # COMMAND ----------
 
