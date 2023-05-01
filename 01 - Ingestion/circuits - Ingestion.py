@@ -1,31 +1,9 @@
 # Databricks notebook source
-import requests
-from pyspark.sql.functions import from_json, col,asc,desc, monotonically_increasing_id, concat, lit, max, min, row_number, hash, abs,dayofyear
-from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType
-from datetime import date, datetime
-import pytz
-
-# COMMAND ----------
-
 # MAGIC %run "../0 - includes/configuration"
 
 # COMMAND ----------
 
 # MAGIC %run "../0 - includes/functions"
-
-# COMMAND ----------
-
-# # Get date in UTC
-# date_time_utc = datetime.utcnow()
-
-# # define the local time
-# fuso_horario_local = pytz.timezone('America/Sao_Paulo')
-
-# # fix the date with local datetime
-# date_time_local = date_time_utc.replace(tzinfo=pytz.utc).astimezone(fuso_horario_local)
-
-# # get the date from datetime
-# actual_date = date_time_local.date()
 
 # COMMAND ----------
 
@@ -50,16 +28,8 @@ df_circuits = (add_date_load_landing(df_circuits))
 
 # COMMAND ----------
 
-# display(df_circuits)
-
-# COMMAND ----------
-
 df_circuits = (df_circuits.orderBy(asc("locality"))
                           .withColumn('id', abs(hash(concat("circuitId", df_circuits["circuitId"])))))
-
-# COMMAND ----------
-
-# display(df_circuits)
 
 # COMMAND ----------
 

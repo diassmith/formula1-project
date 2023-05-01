@@ -1,13 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC ### Working with circuits delta in Silver Layer
-
-# COMMAND ----------
-
-# DBTITLE 1,Importing Library
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
-from pyspark.sql.functions import col, lit
-from delta.tables import *
+# MAGIC ### Circuits Silver
 
 # COMMAND ----------
 
@@ -21,12 +14,7 @@ from delta.tables import *
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ##### Reading the delta table circuits from bronze
-
-# COMMAND ----------
-
-# DBTITLE 1,Reading table
+# DBTITLE 1,Reading Delta Table
 df_circuits = spark.table("f1_bronze.circuits")
 
 # COMMAND ----------
@@ -35,11 +23,11 @@ df_circuits.printSchema()
 
 # COMMAND ----------
 
-df_circuits = (df_circuits.withColumnRenamed("circuitId", "circuit_ref")
+df_circuits = (df_circuits.withColumnRenamed("circuitId", "circuitRef")
                           .withColumnRenamed("locality", "location")
                           .withColumnRenamed("lat","latitude")
                           .withColumnRenamed("long", "longitude")
-                          .withColumnRenamed("circuitName","circuit_name").select('id','circuit_ref','circuit_name','location','country','latitude','longitude','date_ref','date_load_bronze'))
+                          .withColumnRenamed("circuitName","circuit_name").select('id','circuitRef','circuit_name','location','country','latitude','longitude','date_ref','date_load_bronze'))
 
 # COMMAND ----------
 
