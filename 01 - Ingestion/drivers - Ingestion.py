@@ -1,10 +1,10 @@
 # Databricks notebook source
-import requests
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import from_json, col, asc,desc, monotonically_increasing_id, concat, lit, max, min, row_number, hash, abs,dayofyear
-from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType, DateType
-from pyspark.sql.window import Window
-import pyspark.sql.functions as F
+# import requests
+# from pyspark.sql import SparkSession
+# from pyspark.sql.functions import from_json, col, asc,desc, monotonically_increasing_id, concat, lit, max, min, row_number, hash, abs,dayofyear
+# from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType, DateType
+# from pyspark.sql.window import Window
+# import pyspark.sql.functions as F
 
 # COMMAND ----------
 
@@ -88,3 +88,18 @@ df_drivers = add_date_load_landing(df_drivers)
 # COMMAND ----------
 
 df_drivers.write.mode("overwrite").parquet(f"{landing_folder_path}/drivers")
+
+# COMMAND ----------
+
+# DBTITLE 1,TO DO UPDATE TO THIS
+# import requests
+# import pyspark.sql.functions as F
+
+# response = requests.get('https://ergast.com/api/f1/drivers.json?limit=2023')
+# json_data = response.json()
+
+# drivers = json_data['MRData']['DriverTable']['Drivers']
+# df_drivers = spark.createDataFrame(drivers)
+
+
+
