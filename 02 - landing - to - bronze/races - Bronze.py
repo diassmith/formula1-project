@@ -22,7 +22,7 @@ df_races = add_date_load_bronze(df_races)
 
 # COMMAND ----------
 
-# DBTITLE 1,Write the output to processed container in parquet format
+# DBTITLE 1,Creating Races Silver
 if spark.catalog.tableExists("f1_bronze.races"):
     df_target = DeltaTable.forPath(spark, "/mnt/adlsformula1/bronze/races")
     print("upsert")

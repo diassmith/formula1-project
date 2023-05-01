@@ -34,19 +34,4 @@ df_races = add_date_load_landing(df_races)
 
 # COMMAND ----------
 
-# df_races = (df_races.select(col('raceId'),col('season'),col('round'),col('Circuit').getItem('circuitId').alias('circuitId'),
-#                         col('raceName'),col('date'),col('time'),col('url'),
-#                         col('FirstPractice').getItem('date').alias('fp1_date'),
-#                         col('FirstPractice').getItem('time').alias('fp1_time'),
-#                         col('SecondPractice').getItem('date').alias('fp2_date'),
-#                         col('SecondPractice').getItem('time').alias('fp2_time'),
-#                         col('ThirdPractice').getItem('date').alias('fp3_date'),
-#                         col('ThirdPractice').getItem('time').alias('fp3_time'),
-#                         col('Qualifying').getItem('date').alias('quali_date'),
-#                         col('Qualifying').getItem('time').alias('quali_time'),
-#                         col('Sprint').getItem('date').alias('sprint_date'),
-#                         col('Sprint').getItem('time').alias('sprint_time')))
-
-# COMMAND ----------
-
 df_races.write.mode("overwrite").parquet(f"{landing_folder_path}/races")
