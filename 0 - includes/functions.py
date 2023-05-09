@@ -2,7 +2,7 @@
 import requests
 import pytz
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import from_json, col, asc,desc, monotonically_increasing_id, concat, lit, max, min, row_number, hash, abs,dayofyear, year, to_timestamp
+from pyspark.sql.functions import from_json, col, asc,desc, monotonically_increasing_id, concat, lit, max, min, row_number, hash, abs,dayofyear, year, to_timestamp, to_date
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, IntegerType, DateType
 from pyspark.sql.window import Window
 import pyspark.sql.functions as F
