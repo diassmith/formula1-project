@@ -66,8 +66,7 @@
 
 # COMMAND ----------
 
-import requests
-import pyspark.sql.functions as F
+
 
 # Define os anos de início e fim
 start_year = 1950
@@ -103,20 +102,32 @@ for data in json_data:
             row['constructor_constructorId'] = result['Constructor']['constructorId']
             row['constructor_name'] = result['Constructor']['name']
             row['constructor_nationality'] = result['Constructor']['nationality']
+            if 'FastestLap' in result:
+                row['fastestLap'] = result['FastestLap']['lap']
+                row['fastestLapTime'] = result['FastestLap']['Time']['time']
+                row['fastestLapSpeed'] = result['FastestLap']['AverageSpeed']['speed']
+            else:
+                row['fastestLap'] = None
+                row['fastestLapTime'] = None
+                row['fastestLapSpeed'] = None
             rows.append(row.copy())
 
 # Cria o DataFrame a partir da lista de linhas
 df_results = spark.createDataFrame(rows)
 
-df_results = (df_results.withColumn('raceId', abs(hash( df_results["raceName"]))))
 
-df_results = (df_results.withColumn('driverId', abs(hash( df_results["driver_driverId"]))))
 
-df_results = (df_results.withColumn('constructorId', abs(hash( df_results["constructor_constructorId"]))))
-                        # .withColumn('driverId2',abs(hash(concat("driverId", df_results["driver_driverId"]))))
-                        # .withColumn('constructorId2', abs(hash(concat("constructorId", df_results["constructor_constructorId"])))))
+df_results = (df_results.withColumn('race_id', abs(hash( df_results["raceName"]))))
+
+df_results = (df_results.withColumn('driver_id', abs(hash( df_results["driver_driverId"]))))
+
+df_results = (df_results.withColumn('constructor_id', abs(hash( df_results["constructor_constructorId"]))))
+
+df_results = (df_results.withColumn('result_id', concat(concat(concat('race_id','driver_id'),'constructor_id'),abs(hash( df_results["status"])))))
+
+                      
 # Transforma a coluna 'date' em tipo 'date'
-# df_results = df_results.withColumn('date', F.to_date('date'))
+df_results = df_results.withColumn('date', F.to_date('date'))
 
 # # Exibe o DataFrame resultante
 # df_results.show()
