@@ -66,8 +66,7 @@
 
 # COMMAND ----------
 
-import requests
-import pyspark.sql.functions as F
+
 
 # Define os anos de início e fim
 start_year = 1950
@@ -113,6 +112,8 @@ df_results = (df_results.withColumn('raceId', abs(hash( df_results["raceName"]))
 df_results = (df_results.withColumn('driverId', abs(hash( df_results["driver_driverId"]))))
 
 df_results = (df_results.withColumn('constructorId', abs(hash( df_results["constructor_constructorId"]))))
+
+df_results = (df_results.withColumn('resultId', concat(concat(concat('raceId','driverId'),'constructorId'),abs(hash( df_results["status"])))))
                         # .withColumn('driverId2',abs(hash(concat("driverId", df_results["driver_driverId"]))))
                         # .withColumn('constructorId2', abs(hash(concat("constructorId", df_results["constructor_constructorId"])))))
 # Transforma a coluna 'date' em tipo 'date'
